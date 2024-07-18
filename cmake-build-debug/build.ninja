@@ -56,6 +56,13 @@ build CMakeFiles/Chess.dir/main.cpp.o: CXX_COMPILER__Chess_unscanned_Debug /User
   OBJECT_DIR = CMakeFiles/Chess.dir
   OBJECT_FILE_DIR = CMakeFiles/Chess.dir
 
+build CMakeFiles/Chess.dir/BoardRepresentation.cpp.o: CXX_COMPILER__Chess_unscanned_Debug /Users/artemkiryukhin/CLionProjects/Chess/BoardRepresentation.cpp || cmake_object_order_depends_target_Chess
+  DEP_FILE = CMakeFiles/Chess.dir/BoardRepresentation.cpp.o.d
+  FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics
+  INCLUDES = -isystem /opt/homebrew/opt/sfml/include
+  OBJECT_DIR = CMakeFiles/Chess.dir
+  OBJECT_FILE_DIR = CMakeFiles/Chess.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Chess
@@ -64,7 +71,7 @@ build CMakeFiles/Chess.dir/main.cpp.o: CXX_COMPILER__Chess_unscanned_Debug /User
 #############################################
 # Link the executable Chess
 
-build Chess: CXX_EXECUTABLE_LINKER__Chess_Debug CMakeFiles/Chess.dir/main.cpp.o | /opt/homebrew/opt/sfml/lib/libsfml-graphics.2.6.1.dylib /opt/homebrew/opt/sfml/lib/libsfml-network.2.6.1.dylib /opt/homebrew/opt/sfml/lib/libsfml-audio.2.6.1.dylib /opt/homebrew/opt/sfml/lib/libsfml-window.2.6.1.dylib /opt/homebrew/opt/sfml/lib/libsfml-system.2.6.1.dylib
+build Chess: CXX_EXECUTABLE_LINKER__Chess_Debug CMakeFiles/Chess.dir/main.cpp.o CMakeFiles/Chess.dir/BoardRepresentation.cpp.o | /opt/homebrew/opt/sfml/lib/libsfml-graphics.2.6.1.dylib /opt/homebrew/opt/sfml/lib/libsfml-network.2.6.1.dylib /opt/homebrew/opt/sfml/lib/libsfml-audio.2.6.1.dylib /opt/homebrew/opt/sfml/lib/libsfml-window.2.6.1.dylib /opt/homebrew/opt/sfml/lib/libsfml-system.2.6.1.dylib
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk
   LINK_LIBRARIES = -Wl,-rpath,/opt/homebrew/opt/sfml/lib  /opt/homebrew/opt/sfml/lib/libsfml-graphics.2.6.1.dylib  /opt/homebrew/opt/sfml/lib/libsfml-network.2.6.1.dylib  /opt/homebrew/opt/sfml/lib/libsfml-audio.2.6.1.dylib  /opt/homebrew/opt/sfml/lib/libsfml-window.2.6.1.dylib  /opt/homebrew/opt/sfml/lib/libsfml-system.2.6.1.dylib
   OBJECT_DIR = CMakeFiles/Chess.dir
