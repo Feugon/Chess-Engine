@@ -12,7 +12,17 @@ find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
 
 if (SFML_FOUND)
     # Add executable target
-    add_executable(Chess main.cpp BoardRepresentation.cpp)
+    add_executable(Chess main.cpp BoardRepresentation.cpp pieces/pieceMovement.cpp
+            pieces/pawn.cpp
+            pieces/pawn.h
+            pieces/knight.cpp
+            pieces/knight.h
+            pieces/bishop.cpp
+            pieces/bishop.h
+            pieces/rook.cpp
+            pieces/rook.h
+            pieces/queen.cpp
+            pieces/queen.h)
 
     # Specify include directories
     target_include_directories(Chess PRIVATE ${SFML_INCLUDE_DIRS})

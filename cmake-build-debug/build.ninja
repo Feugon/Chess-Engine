@@ -63,6 +63,48 @@ build CMakeFiles/Chess.dir/BoardRepresentation.cpp.o: CXX_COMPILER__Chess_unscan
   OBJECT_DIR = CMakeFiles/Chess.dir
   OBJECT_FILE_DIR = CMakeFiles/Chess.dir
 
+build CMakeFiles/Chess.dir/pieces/pieceMovement.cpp.o: CXX_COMPILER__Chess_unscanned_Debug /Users/artemkiryukhin/CLionProjects/Chess/pieces/pieceMovement.cpp || cmake_object_order_depends_target_Chess
+  DEP_FILE = CMakeFiles/Chess.dir/pieces/pieceMovement.cpp.o.d
+  FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics
+  INCLUDES = -isystem /opt/homebrew/opt/sfml/include
+  OBJECT_DIR = CMakeFiles/Chess.dir
+  OBJECT_FILE_DIR = CMakeFiles/Chess.dir/pieces
+
+build CMakeFiles/Chess.dir/pieces/pawn.cpp.o: CXX_COMPILER__Chess_unscanned_Debug /Users/artemkiryukhin/CLionProjects/Chess/pieces/pawn.cpp || cmake_object_order_depends_target_Chess
+  DEP_FILE = CMakeFiles/Chess.dir/pieces/pawn.cpp.o.d
+  FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics
+  INCLUDES = -isystem /opt/homebrew/opt/sfml/include
+  OBJECT_DIR = CMakeFiles/Chess.dir
+  OBJECT_FILE_DIR = CMakeFiles/Chess.dir/pieces
+
+build CMakeFiles/Chess.dir/pieces/knight.cpp.o: CXX_COMPILER__Chess_unscanned_Debug /Users/artemkiryukhin/CLionProjects/Chess/pieces/knight.cpp || cmake_object_order_depends_target_Chess
+  DEP_FILE = CMakeFiles/Chess.dir/pieces/knight.cpp.o.d
+  FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics
+  INCLUDES = -isystem /opt/homebrew/opt/sfml/include
+  OBJECT_DIR = CMakeFiles/Chess.dir
+  OBJECT_FILE_DIR = CMakeFiles/Chess.dir/pieces
+
+build CMakeFiles/Chess.dir/pieces/bishop.cpp.o: CXX_COMPILER__Chess_unscanned_Debug /Users/artemkiryukhin/CLionProjects/Chess/pieces/bishop.cpp || cmake_object_order_depends_target_Chess
+  DEP_FILE = CMakeFiles/Chess.dir/pieces/bishop.cpp.o.d
+  FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics
+  INCLUDES = -isystem /opt/homebrew/opt/sfml/include
+  OBJECT_DIR = CMakeFiles/Chess.dir
+  OBJECT_FILE_DIR = CMakeFiles/Chess.dir/pieces
+
+build CMakeFiles/Chess.dir/pieces/rook.cpp.o: CXX_COMPILER__Chess_unscanned_Debug /Users/artemkiryukhin/CLionProjects/Chess/pieces/rook.cpp || cmake_object_order_depends_target_Chess
+  DEP_FILE = CMakeFiles/Chess.dir/pieces/rook.cpp.o.d
+  FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics
+  INCLUDES = -isystem /opt/homebrew/opt/sfml/include
+  OBJECT_DIR = CMakeFiles/Chess.dir
+  OBJECT_FILE_DIR = CMakeFiles/Chess.dir/pieces
+
+build CMakeFiles/Chess.dir/pieces/queen.cpp.o: CXX_COMPILER__Chess_unscanned_Debug /Users/artemkiryukhin/CLionProjects/Chess/pieces/queen.cpp || cmake_object_order_depends_target_Chess
+  DEP_FILE = CMakeFiles/Chess.dir/pieces/queen.cpp.o.d
+  FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics
+  INCLUDES = -isystem /opt/homebrew/opt/sfml/include
+  OBJECT_DIR = CMakeFiles/Chess.dir
+  OBJECT_FILE_DIR = CMakeFiles/Chess.dir/pieces
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Chess
@@ -71,7 +113,7 @@ build CMakeFiles/Chess.dir/BoardRepresentation.cpp.o: CXX_COMPILER__Chess_unscan
 #############################################
 # Link the executable Chess
 
-build Chess: CXX_EXECUTABLE_LINKER__Chess_Debug CMakeFiles/Chess.dir/main.cpp.o CMakeFiles/Chess.dir/BoardRepresentation.cpp.o | /opt/homebrew/opt/sfml/lib/libsfml-graphics.2.6.1.dylib /opt/homebrew/opt/sfml/lib/libsfml-network.2.6.1.dylib /opt/homebrew/opt/sfml/lib/libsfml-audio.2.6.1.dylib /opt/homebrew/opt/sfml/lib/libsfml-window.2.6.1.dylib /opt/homebrew/opt/sfml/lib/libsfml-system.2.6.1.dylib
+build Chess: CXX_EXECUTABLE_LINKER__Chess_Debug CMakeFiles/Chess.dir/main.cpp.o CMakeFiles/Chess.dir/BoardRepresentation.cpp.o CMakeFiles/Chess.dir/pieces/pieceMovement.cpp.o CMakeFiles/Chess.dir/pieces/pawn.cpp.o CMakeFiles/Chess.dir/pieces/knight.cpp.o CMakeFiles/Chess.dir/pieces/bishop.cpp.o CMakeFiles/Chess.dir/pieces/rook.cpp.o CMakeFiles/Chess.dir/pieces/queen.cpp.o | /opt/homebrew/opt/sfml/lib/libsfml-graphics.2.6.1.dylib /opt/homebrew/opt/sfml/lib/libsfml-network.2.6.1.dylib /opt/homebrew/opt/sfml/lib/libsfml-audio.2.6.1.dylib /opt/homebrew/opt/sfml/lib/libsfml-window.2.6.1.dylib /opt/homebrew/opt/sfml/lib/libsfml-system.2.6.1.dylib
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk
   LINK_LIBRARIES = -Wl,-rpath,/opt/homebrew/opt/sfml/lib  /opt/homebrew/opt/sfml/lib/libsfml-graphics.2.6.1.dylib  /opt/homebrew/opt/sfml/lib/libsfml-network.2.6.1.dylib  /opt/homebrew/opt/sfml/lib/libsfml-audio.2.6.1.dylib  /opt/homebrew/opt/sfml/lib/libsfml-window.2.6.1.dylib  /opt/homebrew/opt/sfml/lib/libsfml-system.2.6.1.dylib
   OBJECT_DIR = CMakeFiles/Chess.dir

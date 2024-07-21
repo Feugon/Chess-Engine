@@ -222,6 +222,15 @@ Chess_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 Chess_SOURCE_DIR:STATIC=/Users/artemkiryukhin/CLionProjects/Chess
 
+//Value Computed by CMake
+Project_BINARY_DIR:STATIC=/Users/artemkiryukhin/CLionProjects/Chess/cmake-build-debug
+
+//Value Computed by CMake
+Project_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+Project_SOURCE_DIR:STATIC=/Users/artemkiryukhin/CLionProjects/Chess
+
 //Path to a file.
 SFML_DOC_DIR:PATH=/opt/homebrew/share/doc/SFML
 
