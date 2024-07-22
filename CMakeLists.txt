@@ -8,7 +8,7 @@ set(SFML_DIR "/opt/homebrew/opt/sfml/lib/cmake/SFML")
 
 
 # Find SFML package
-find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
+find_package(SFML 2.5 COMPONENTS system window network audio REQUIRED)
 
 if (SFML_FOUND)
     # Add executable target
@@ -22,7 +22,12 @@ if (SFML_FOUND)
             pieces/rook.cpp
             pieces/rook.h
             pieces/queen.cpp
-            pieces/queen.h)
+            pieces/queen.h
+            GameOutput/gameClass.cpp
+            GameOutput/gameClass.h
+            GameOutput/gameClass.cpp
+            GameOutput/constants.h
+    )
 
     # Specify include directories
     target_include_directories(Chess PRIVATE ${SFML_INCLUDE_DIRS})
