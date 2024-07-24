@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "constants.h"
 #include <vector>
+#include <iostream>
 #include <unordered_map>
 #include <string>
 #include <cstdlib>
@@ -32,13 +33,9 @@ void chessGame:: drawSelected(sf::RenderWindow &window) {
 
 void chessGame::drawPieces(sf::RenderWindow &window, const std::vector<int> &board) {
 
-
-
     std::unordered_map<int, std::string> intToPiece = {
     {1, "pawn"}, {2,"knight"}, {3,"bishop"},
     {4, "rook"}, {5,"queen"}, {6,"king"}};
-
-
 
     for (int i = 21; i < 99; i++) {
         if(board[i] == 7 || board[i] == 0) {

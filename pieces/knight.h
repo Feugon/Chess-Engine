@@ -1,4 +1,8 @@
 #pragma once
 #include <vector>
+#include "basePiece.h"
 
-std::vector<int> knightMoves(int index, const std::vector<int> &board);
+
+class Knight : public basePiece {
+    std::vector<int> knightMoves(const std::vector<int> &board);
+};

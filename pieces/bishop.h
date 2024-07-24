@@ -1,4 +1,10 @@
 #pragma once
+#include "basePiece.h"
 #include <vector>
 
-std::vector<int> bishopMoves(int index, const std::vector<int> &board);
+
+
+class Bishop : public basePiece {
+public:
+    std::vector<int> bishopMoves(const std::vector<int> &board);
+};

@@ -1,11 +1,18 @@
-#include "pieceMovement.h"
+#include "basePiece.h"
 
-//TODO add out of bounds behavior here
 
-bool isOccupiedByFriendly(const std::vector<int> &board, int index, bool isWhite) {
+
+basePiece::basePiece(int position, bool is_white) {
+    m_position = position;
+    m_isWhite = is_white;
+}
+
+
+
+bool basePiece::isOccupiedByFriendly(const std::vector<int> &board, int index) {
     bool occupiedByFriend;
 
-    if(isWhite) {
+    if(m_isWhite) {
         if(board[index] > 0 && board[index] != 7) {
             occupiedByFriend = true;
         } else {
@@ -23,15 +30,15 @@ bool isOccupiedByFriendly(const std::vector<int> &board, int index, bool isWhite
 }
 
 
-bool isSquareEmpty(const std::vector<int> &board, int index ) {
+bool basePiece::isSquareEmpty(const std::vector<int> &board, int index) {
     bool empty = board[index] == 0 ? true : false;
     return empty;
 }
 
-bool isOccupiedByEnemy(const std::vector<int> &board, int index, bool isWhite) {
+bool basePiece::isOccupiedByEnemy(const std::vector<int> &board, int index) {
     bool occupiedByEnemy;
 
-    if(isWhite) {
+    if(m_isWhite) {
         if(board[index] < 0) {
             occupiedByEnemy = true;
         } else {
@@ -50,20 +57,20 @@ bool isOccupiedByEnemy(const std::vector<int> &board, int index, bool isWhite) {
 
 
 
-std::vector<int> slidingMoves(const std::vector<int> &board, int index, bool isWhite, const std::vector<int> &shifts) {
+std::vector<int> basePiece::slidingMoves(const std::vector<int> &board, const std::vector<int> &shifts) {
 
     std::vector<int> possibleMoves;
 
     for(int shift: shifts) {
         int distance = 1;
-        while(board[index + distance * shift] != 7) {
-            if(isOccupiedByFriendly(board,index + distance * shift, isWhite)) {
+        while(board[m_position + distance * shift] != 7) {
+            if(isOccupiedByFriendly(board,m_position + distance * shift)) {
                 break;
-            } else if(isOccupiedByEnemy(board,index + distance * shift, isWhite)) {
-                possibleMoves.push_back(index + distance * shift);
+            } else if(isOccupiedByEnemy(board, m_position + distance * shift)) {
+                possibleMoves.push_back(m_position + distance * shift);
                 break;
             } else {
-                possibleMoves.push_back(index + distance * shift);
+                possibleMoves.push_back(m_position + distance * shift);
                 distance++;
             }
         }

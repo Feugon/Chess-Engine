@@ -1,4 +1,9 @@
 #pragma once
 #include <vector>
+#include "basePiece.h"
 
-std::vector<int> pawnMoves(int index, const std::vector<int> &board);
+class Pawn : public basePiece {
+public:
+    std::vector<int> pawnMoves(const std::vector<int> &board);
+};
+

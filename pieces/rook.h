@@ -1,4 +1,10 @@
 #pragma once
+#include "basePiece.h"
 #include <vector>
 
-std::vector<int> rookMoves(int index, const std::vector<int> &board);
+
+
+class Rook : public basePiece {
+public:
+    std::vector<int> rookMoves(const std::vector<int> &board);
+};

@@ -6,9 +6,6 @@
 #include <cctype>
 
 
-
-//TODO make the input a FEN string
-//TODO pieces are setup wrong (right and left borders are 0's instead of 7's)
 std::vector<int> boardMatrix(const std::string &FEN){
 
     /* We are using a 10x12 matrix for the board representation

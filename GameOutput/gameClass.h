@@ -11,4 +11,5 @@ public:
     void selectedSetter(int mouseX, int mouseY);
 private:
     int m_selected;
+    bool m_whiteMove;
 };

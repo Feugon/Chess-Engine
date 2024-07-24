@@ -1,14 +1,11 @@
-#include "rook.h"
-#include "pieceMovement.h"
+#include "queen.h"
+#include "basePiece.h"
 #include <vector>
 
-//TODO make board be the first param in everything
 
-std::vector<int> queenMoves(int index, const std::vector<int> &board) {
+std::vector<int> Queen::queenMoves(const std::vector<int> &board) {
 
-    bool isWhite = board[index] > 0;
-    // this corresponds to position shifts for a rook
+    // this corresponds to position shifts for a queen
     std::vector<int> shifts = {11,10,9,1,-1,-9,-10,-11};
-
-    return slidingMoves(board,index,isWhite,shifts);
+    return slidingMoves(board,shifts);
 }

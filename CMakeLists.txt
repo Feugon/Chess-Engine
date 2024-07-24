@@ -12,7 +12,7 @@ find_package(SFML 2.5 COMPONENTS system window network audio REQUIRED)
 
 if (SFML_FOUND)
     # Add executable target
-    add_executable(Chess main.cpp BoardRepresentation.cpp pieces/pieceMovement.cpp
+    add_executable(Chess main.cpp BoardRepresentation.cpp pieces/basePiece.cpp
             pieces/pawn.cpp
             pieces/pawn.h
             pieces/knight.cpp

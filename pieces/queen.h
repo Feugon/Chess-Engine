@@ -1,4 +1,10 @@
 #pragma once
+#include "basePiece.h"
 #include <vector>
 
-std::vector<int> queenMoves(int index, const std::vector<int> &board);
+
+
+class Queen : public basePiece {
+public:
+    std::vector<int> queenMoves(const std::vector<int> &board);
+};
