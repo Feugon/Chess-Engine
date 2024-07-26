@@ -4,13 +4,16 @@
 #include <iostream>
 #include <vector>
 
+// SOOO the cpu is bottlenecking, mighttttt want to look into that
+
+
 int main() {
-    std::vector<int> board = boardMatrix("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+    std::vector<int> board = boardMatrix("r1bq1rk1/ppp2pp1/2nb3p/1B6/3P4/5N1P/P1P2PP1/R1BQ1RK1");
     printBoard(board);
 
     sf::RenderWindow window(sf::VideoMode(640, 640), "Chess Board");
 
-    chessGame game;
+    chessGame game(board);
 
     // The game loop should be based on events for this scenario
     while (window.isOpen()) {
@@ -32,9 +35,8 @@ int main() {
             window.clear();
 
             // Call the function to draw the chessboard
-            game.drawBoard(window);
-            game.drawSelected(window);
-            game.drawPieces(window, board);
+            game.drawPosition(window);
+            game.drawPossibleMoves(window,board);
 
             // Display everything that was drawn
             window.display();

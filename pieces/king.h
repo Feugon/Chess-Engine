@@ -4,10 +4,10 @@
 #include <string>
 #include <iostream>
 
-class Pawn : public basePiece {
+class King : public basePiece {
 public:
-    Pawn(int postion, bool is_white): basePiece(postion, is_white) {
-        m_imageDir = is_white ? "../images/w_pawn.png" : "../images/b_pawn.png";
+    King(int postion, bool is_white): basePiece(postion, is_white) {
+        m_imageDir = is_white ? "../images/w_king.png" : "../images/b_king.png";
     }
     std::vector<int> generateMoves(const std::vector<int> &board) override;
 };

@@ -1,8 +1,12 @@
 #pragma once
 #include <vector>
 #include "basePiece.h"
-
+#include <string>
 
 class Knight : public basePiece {
-    std::vector<int> knightMoves(const std::vector<int> &board);
+public:
+    Knight(int postion, bool is_white): basePiece(postion, is_white) {
+        m_imageDir = is_white ? "../images/w_knight.png" : "../images/b_knight.png";
+    }
+    std::vector<int> generateMoves(const std::vector<int> &board) override;
 };

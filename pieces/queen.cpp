@@ -3,7 +3,7 @@
 #include <vector>
 
 
-std::vector<int> Queen::queenMoves(const std::vector<int> &board) {
+std::vector<int> Queen::generateMoves(const std::vector<int> &board) {
 
     // this corresponds to position shifts for a queen
     std::vector<int> shifts = {11,10,9,1,-1,-9,-10,-11};

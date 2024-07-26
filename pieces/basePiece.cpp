@@ -1,11 +1,14 @@
 #include "basePiece.h"
-
+#include <SFML/Graphics.hpp>
+#include "../constants.h"
 
 
 basePiece::basePiece(int position, bool is_white) {
     m_position = position;
     m_isWhite = is_white;
 }
+
+
 
 
 
@@ -77,4 +80,23 @@ std::vector<int> basePiece::slidingMoves(const std::vector<int> &board, const st
     }
 
     return possibleMoves;
+}
+
+#include <iostream>
+
+void basePiece::draw(sf::RenderWindow& window) {
+
+    sf::Texture texture;
+    texture.loadFromFile(m_imageDir);
+    sf::Sprite sprite;
+    sprite.setTexture(texture);
+
+    int y_cord = m_position / 10 - 2;
+    int x_cord = m_position % 10 - 1;
+
+
+    // TODO figure out the equation for the buffer here...
+    sprite.setPosition(x_cord * constants::TILE_WIDTH + 2, y_cord * constants::TILE_HEIGHT + 2);
+    sprite.scale(1.2, 1.2);
+    window.draw(sprite);
 }

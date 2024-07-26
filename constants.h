@@ -8,5 +8,5 @@ namespace constants {
 
     const sf::Color black(100, 47, 8);
     const sf::Color white(225, 204, 153);
-    const sf::Color selected(70, 70, 0);
+    const sf::Color selected(70, 70, 0, 150);
 }

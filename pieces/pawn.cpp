@@ -2,9 +2,9 @@
 #include "basePiece.h"
 #include <vector>
 
-// TODO add promotion here
+// TODO add promotion here and fix it jumping over a piece when moveTwo is true
 
-std::vector<int> Pawn::pawnMoves(const std::vector<int> &board) {
+std::vector<int> Pawn::generateMoves(const std::vector<int> &board) {
 
     std::vector<int> possibleMoves;
 

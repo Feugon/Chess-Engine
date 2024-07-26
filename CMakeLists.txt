@@ -26,7 +26,9 @@ if (SFML_FOUND)
             GameOutput/gameClass.cpp
             GameOutput/gameClass.h
             GameOutput/gameClass.cpp
-            GameOutput/constants.h
+            constants.h
+            pieces/king.cpp
+            pieces/king.h
     )
 
     # Specify include directories
