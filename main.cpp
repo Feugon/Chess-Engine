@@ -15,6 +15,12 @@ int main() {
 
     chessGame game(board);
 
+    // initial draw
+    window.clear();
+    game.drawPosition(window);
+    game.drawPossibleMoves(window, board);
+    window.display();
+
     // The game loop should be based on events for this scenario
     while (window.isOpen()) {
         sf::Event event;

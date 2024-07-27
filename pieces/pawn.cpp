@@ -2,7 +2,7 @@
 #include "basePiece.h"
 #include <vector>
 
-// TODO add promotion here and fix it jumping over a piece when moveTwo is true
+// TODO add promotion
 
 std::vector<int> Pawn::generateMoves(const std::vector<int> &board) {
 
@@ -14,12 +14,16 @@ std::vector<int> Pawn::generateMoves(const std::vector<int> &board) {
     // a lot of magic numbers, these all just correspond to index change of a pawn move
     if(m_isWhite) {
         if(isSquareEmpty(board,m_position-10)) {possibleMoves.push_back(m_position - 10);}
-        if(isSquareEmpty(board,m_position-20) && moveTwo){possibleMoves.push_back(m_position - 20);}
+        if(isSquareEmpty(board,m_position-20) && moveTwo && isSquareEmpty(board,m_position-10)) {
+            possibleMoves.push_back(m_position - 20);
+        }
         if(isOccupiedByEnemy(board, m_position - 11)){possibleMoves.push_back(m_position - 11);}
         if(isOccupiedByEnemy(board, m_position - 9)){possibleMoves.push_back(m_position - 9);}
     } else {
         if(isSquareEmpty(board,m_position + 10)) {possibleMoves.push_back(m_position + 10);}
-        if(isSquareEmpty(board,m_position + 20) && moveTwo){possibleMoves.push_back(m_position + 20);}
+        if(isSquareEmpty(board,m_position + 20) && moveTwo && isSquareEmpty(board,m_position + 10)) {
+            possibleMoves.push_back(m_position + 20);
+        }
         if(isOccupiedByEnemy(board, m_position + 11)){possibleMoves.push_back(m_position + 11);}
         if(isOccupiedByEnemy(board, m_position + 9)){possibleMoves.push_back(m_position + 9);}
     }
