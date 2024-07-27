@@ -80,46 +80,72 @@ void chessGame::drawPosition(sf::RenderWindow& window) {
 
 
 
-
 void chessGame::drawPossibleMoves(sf::RenderWindow &window, const std::vector<int> &board) {
 
+    // checks its the right turn
+    if((board[m_selected] > 0 && m_whiteMove) || (board[m_selected] < 0 && !m_whiteMove)) {
 
-    int x = m_selected % 10 - 1;
-    int y = (m_selected - 20) / 10;
+        int selectedX = m_selected % 10 - 1;
+        int selectedY = (m_selected - 20) / 10;
 
-    sf::RectangleShape square(sf::Vector2f(constants::TILE_WIDTH, constants::TILE_HEIGHT));
-    square.setFillColor(constants::selected);
-    square.setPosition(constants::TILE_WIDTH * x, constants::TILE_HEIGHT * y);
-    window.draw(square);
+        std::vector<int> moves;
+        moves.push_back(m_selected);
+        moves.insert(moves.end(), m_availableMoves.begin(), m_availableMoves.end());
 
-    std::vector<int> moves;
 
-    if(m_indexToPiece.count(m_selected) && m_indexToPiece[m_selected]) {
-        moves = m_indexToPiece[m_selected]->generateMoves(board);
-    }
+        // Draw the initial square and all generated move squares
+        for (auto move : moves) {
+            int x = move % 10 - 1;
+            int y = (move - 20) / 10;
 
-    for(auto move: moves) {
-        int x = move % 10 - 1;
-        int y = (move - 20) / 10;
-
-        sf::RectangleShape square(sf::Vector2f(constants::TILE_WIDTH, constants::TILE_HEIGHT));
-        square.setFillColor(constants::selected);
-        square.setPosition(constants::TILE_WIDTH * x, constants::TILE_HEIGHT * y);
-        window.draw(square);
+            sf::RectangleShape square(sf::Vector2f(constants::TILE_WIDTH, constants::TILE_HEIGHT));
+            square.setFillColor(constants::selected);
+            square.setPosition(constants::TILE_WIDTH * x, constants::TILE_HEIGHT * y);
+            window.draw(square);
+        }
     }
 
 
 }
 
 
+void chessGame::selectedSetter(int mouseX, int mouseY, std::vector<int> &board) {
 
-void chessGame::selectedSetter(int mouseX, int mouseY) {
     int x = mouseX / constants::TILE_WIDTH;
     int y = mouseY / constants::TILE_HEIGHT;
     m_selected = 21 + (10*y) + x;
 
-/*
+    bool selectedMove = std::find(m_availableMoves.begin(), m_availableMoves.end(), m_selected) != m_availableMoves.end();
 
-    */
+    if (selectedMove) {
+        movePiece(m_lastSelected,m_selected, board);
+    }
+
+
+    m_availableMoves.clear();
+
+    if (m_indexToPiece.count(m_selected) && m_indexToPiece[m_selected]) {
+        m_availableMoves = m_indexToPiece[m_selected]->generateMoves(board);
+    }
+
+    m_lastSelected = m_selected;
 }
+
+
+void chessGame::movePiece(int fromIndex, int toIndex, std::vector<int> &board ) {
+
+    m_indexToPiece[fromIndex]->setIndex(toIndex);
+
+    m_indexToPiece[toIndex] = std::move(m_indexToPiece[fromIndex]);
+    m_indexToPiece.erase(fromIndex);
+
+    board[toIndex] = board[fromIndex];
+    board[fromIndex] = 0;
+
+    m_whiteMove = !m_whiteMove;
+    m_selected = NULL;
+}
+
+
+
 

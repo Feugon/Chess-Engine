@@ -1,6 +1,8 @@
 #include "knight.h"
 #include "basePiece.h"
 #include <vector>
+#include <iostream>
+
 
 std::vector<int> Knight::generateMoves(const std::vector<int> &board) {
 

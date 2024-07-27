@@ -8,21 +8,22 @@ basePiece::basePiece(int position, bool is_white) {
     m_isWhite = is_white;
 }
 
-
-
+void basePiece::setIndex(int index) {
+    m_position = index;
+}
 
 
 bool basePiece::isOccupiedByFriendly(const std::vector<int> &board, int index) {
     bool occupiedByFriend;
 
     if(m_isWhite) {
-        if(board[index] > 0 && board[index] != 7) {
+        if(board[index] > 0) {
             occupiedByFriend = true;
         } else {
             occupiedByFriend = false;
         }
     } else {
-        if(board[index] < 0) {
+        if(board[index] < 0 || board[index] == 7) {
             occupiedByFriend = true;
         } else {
             occupiedByFriend = false;

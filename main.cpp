@@ -8,7 +8,7 @@
 
 
 int main() {
-    std::vector<int> board = boardMatrix("r1bq1rk1/ppp2pp1/2nb3p/1B6/3P4/5N1P/P1P2PP1/R1BQ1RK1");
+    std::vector<int> board = boardMatrix("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
     printBoard(board);
 
     sf::RenderWindow window(sf::VideoMode(640, 640), "Chess Board");
@@ -25,7 +25,7 @@ int main() {
                 window.close();
             }
             if (event.type == sf::Event::MouseButtonPressed) {
-                game.selectedSetter(event.mouseButton.x, event.mouseButton.y);
+                game.selectedSetter(event.mouseButton.x, event.mouseButton.y, board);
                 shouldUpdate = true; // Set flag to true when a relevant event occurs
             }
         }
@@ -38,10 +38,11 @@ int main() {
             game.drawPosition(window);
             game.drawPossibleMoves(window,board);
 
+
             // Display everything that was drawn
             window.display();
 
-            shouldUpdate = false; // Reset the flag after updating
+            shouldUpdate = false;
         }
     }
 

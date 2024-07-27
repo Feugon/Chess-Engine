@@ -9,9 +9,14 @@ class basePiece {
 
 
 public:
+
     basePiece(int position, bool is_white);
+    virtual ~basePiece() = default;
+
     void draw(sf::RenderWindow& window);
     virtual std::vector<int> generateMoves(const std::vector<int> &board) = 0;
+
+    void setIndex(int index);
 
 protected:
 
