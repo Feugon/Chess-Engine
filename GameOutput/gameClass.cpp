@@ -153,8 +153,7 @@ void chessGame::movePiece(int fromIndex, int toIndex, std::vector<int> &board ) 
     m_whiteMove = !m_whiteMove;
     m_selected = NULL;
 
-    //pointerBoard
-    // hello
+    //test
 }
 
 
