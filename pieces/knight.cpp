@@ -4,7 +4,7 @@
 #include <iostream>
 
 
-std::vector<int> Knight::generateMoves(const std::vector<int> &board) {
+std::vector<int> Knight::generateMoves(const std::vector<std::unique_ptr<basePiece>> &board) {
 
     std::vector<int> possibleMoves;
 

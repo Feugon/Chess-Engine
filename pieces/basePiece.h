@@ -7,17 +7,17 @@
 
 class basePiece {
 
-
 public:
 
     basePiece(int position, bool is_white, std::string type);
     virtual ~basePiece() = default;
 
     void draw(sf::RenderWindow& window);
-    virtual std::vector<int> generateMoves(const std::vector<int> &board) = 0;
+    virtual std::vector<int> generateMoves(const std::vector<std::unique_ptr<basePiece>> &board) = 0;
 
     virtual void setIndex(int index);
     virtual std::string getType(){return m_type;}
+    virtual bool getIsWhite(){return m_isWhite;}
 
 protected:
     std::string m_type = "BasePiece";
@@ -25,8 +25,8 @@ protected:
     int m_position;
     std::string m_imageDir;
 
-    std::vector<int> slidingMoves(const std::vector<int> &board, const std::vector<int> &shifts);
-    bool isOccupiedByFriendly(const std::vector<int> &board, int  index);
-    bool isOccupiedByEnemy(const std::vector<int> &board, int index);
-    bool isSquareEmpty(const std::vector<int> &board, int index);
+    std::vector<int> slidingMoves(const std::vector<std::unique_ptr<basePiece>> &board, const std::vector<int> &shifts);
+    bool isOccupiedByFriendly(const std::vector<std::unique_ptr<basePiece>> &board, int  index);
+    bool isOccupiedByEnemy(const std::vector<std::unique_ptr<basePiece>> &board, int index);
+    bool isSquareEmpty(const std::vector<std::unique_ptr<basePiece>>&board, int index);
 };

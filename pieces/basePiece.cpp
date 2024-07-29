@@ -14,17 +14,17 @@ void basePiece::setIndex(int index) {
 }
 
 
-bool basePiece::isOccupiedByFriendly(const std::vector<int> &board, int index) {
+bool basePiece::isOccupiedByFriendly(const std::vector<std::unique_ptr<basePiece>> &board, int index) {
     bool occupiedByFriend;
 
     if(m_isWhite) {
-        if(board[index] > 0) {
+        if(board[index]->getIsWhite() || board[index]->getType() == "Padding") {
             occupiedByFriend = true;
         } else {
             occupiedByFriend = false;
         }
     } else {
-        if(board[index] < 0 || board[index] == 7) {
+        if(!board[index]->getIsWhite() || board[index]->getType() == "Padding") {
             occupiedByFriend = true;
         } else {
             occupiedByFriend = false;
@@ -35,22 +35,21 @@ bool basePiece::isOccupiedByFriendly(const std::vector<int> &board, int index) {
 }
 
 
-bool basePiece::isSquareEmpty(const std::vector<int> &board, int index) {
-    bool empty = board[index] == 0 ? true : false;
-    return empty;
+bool basePiece::isSquareEmpty(const std::vector<std::unique_ptr<basePiece>> &board, int index) {
+    return board[index] == nullptr;
 }
 
-bool basePiece::isOccupiedByEnemy(const std::vector<int> &board, int index) {
+bool basePiece::isOccupiedByEnemy(const std::vector<std::unique_ptr<basePiece>> &board, int index) {
     bool occupiedByEnemy;
 
     if(m_isWhite) {
-        if(board[index] < 0) {
+        if(!board[index]->getIsWhite() || board[index]->getType() == "Padding") {
             occupiedByEnemy = true;
         } else {
             occupiedByEnemy = false;
         }
     } else {
-        if(board[index] > 0 && board[index] != 7) {
+        if(board[index]->getIsWhite() || board[index]->getType() == "Padding") {
             occupiedByEnemy = true;
         } else {
             occupiedByEnemy = false;
@@ -62,13 +61,13 @@ bool basePiece::isOccupiedByEnemy(const std::vector<int> &board, int index) {
 
 
 
-std::vector<int> basePiece::slidingMoves(const std::vector<int> &board, const std::vector<int> &shifts) {
+std::vector<int> basePiece::slidingMoves(const std::vector<std::unique_ptr<basePiece>> &board, const std::vector<int> &shifts) {
 
     std::vector<int> possibleMoves;
 
     for(int shift: shifts) {
         int distance = 1;
-        while(board[m_position + distance * shift] != 7) {
+        while(board[m_position + distance * shift]->getType() != "Padding") {
             if(isOccupiedByFriendly(board,m_position + distance * shift)) {
                 break;
             } else if(isOccupiedByEnemy(board, m_position + distance * shift)) {
@@ -84,7 +83,7 @@ std::vector<int> basePiece::slidingMoves(const std::vector<int> &board, const st
     return possibleMoves;
 }
 
-#include <iostream>
+
 
 void basePiece::draw(sf::RenderWindow& window) {
 

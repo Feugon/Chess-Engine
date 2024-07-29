@@ -4,7 +4,7 @@
 
 
 
-std::vector<int> Rook::generateMoves(const std::vector<int> &board) {
+std::vector<int> Rook::generateMoves(const std::vector<std::unique_ptr<basePiece>> &board) {
 
     // this corresponds to position shifts for a bishop
     std::vector<int> shifts = {10,1,-1,-10};

@@ -12,5 +12,5 @@ public:
     }
 
 
-    std::vector<int> generateMoves(const std::vector<int> &board) override;
+    std::vector<int> generateMoves(const std::vector<std::unique_ptr<basePiece>> &board) override;
 };

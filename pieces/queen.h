@@ -10,5 +10,5 @@ public:
     Queen(int postion, bool is_white, std::string type): basePiece(postion, is_white, type) {
         m_imageDir = is_white ? "../images/w_queen.png" : "../images/b_queen.png";
     }
-    std::vector<int> generateMoves(const std::vector<int> &board) override;
+    std::vector<int> generateMoves(const std::vector<std::unique_ptr<basePiece>> &board) override;
 };

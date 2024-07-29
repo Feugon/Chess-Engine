@@ -29,6 +29,7 @@ if (SFML_FOUND)
             constants.h
             pieces/king.cpp
             pieces/king.h
+            pieces/padding.h
     )
 
     # Specify include directories

@@ -4,7 +4,7 @@
 
 // TODO add promotion
 
-std::vector<int> Pawn::generateMoves(const std::vector<int> &board) {
+std::vector<int> Pawn::generateMoves(const std::vector<std::unique_ptr<basePiece>> &board) {
 
     std::vector<int> possibleMoves;
 

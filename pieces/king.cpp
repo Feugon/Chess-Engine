@@ -6,8 +6,8 @@
 #include <iostream>
 
 
-void King::canCastle(std::unordered_map<int, std::unique_ptr<basePiece>> &pointerMap, const std::vector<int> &board) {
-
+void King::canCastle(std::unordered_map<int, std::unique_ptr<basePiece>> &pointerMap) {
+/*
     bool kingRookPresent = board[m_position + 3] == 4 || board[m_position + 3] == - 4;
     bool queenRookPresent = board[m_position - 4] == 4 || board[m_position - 4] == -4;
     bool kingsRookMoved;
@@ -34,12 +34,13 @@ void King::canCastle(std::unordered_map<int, std::unique_ptr<basePiece>> &pointe
             m_canQueensideCastle = true;
         }
     }
+    */
 }
 
 
 
 
-std::vector<int> King::generateMoves(const std::vector<int> &board) {
+std::vector<int> King::generateMoves(const std::vector<std::unique_ptr<basePiece>> &board) {
 
     std::vector<int> possibleMoves;
 
