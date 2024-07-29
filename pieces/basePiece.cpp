@@ -17,14 +17,17 @@ void basePiece::setIndex(int index) {
 bool basePiece::isOccupiedByFriendly(const std::vector<std::unique_ptr<basePiece>> &board, int index) {
     bool occupiedByFriend;
 
-    if(m_isWhite) {
-        if(board[index]->getIsWhite() || board[index]->getType() == "Padding") {
+
+    if (board[index] == nullptr) {
+        return false;
+    } else if (m_isWhite) {
+        if (board[index]->getIsWhite() || board[index]->getType() == "Padding") {
             occupiedByFriend = true;
         } else {
             occupiedByFriend = false;
         }
     } else {
-        if(!board[index]->getIsWhite() || board[index]->getType() == "Padding") {
+        if (!board[index]->getIsWhite() || board[index]->getType() == "Padding") {
             occupiedByFriend = true;
         } else {
             occupiedByFriend = false;
@@ -40,23 +43,22 @@ bool basePiece::isSquareEmpty(const std::vector<std::unique_ptr<basePiece>> &boa
 }
 
 bool basePiece::isOccupiedByEnemy(const std::vector<std::unique_ptr<basePiece>> &board, int index) {
-    bool occupiedByEnemy;
 
-    if(m_isWhite) {
-        if(!board[index]->getIsWhite() || board[index]->getType() == "Padding") {
-            occupiedByEnemy = true;
+    if(board[index] == nullptr) {
+        return false;
+    } else if(m_isWhite) {
+        if(!board[index]->getIsWhite() || board[index]->getType() == "Padding") {  // this could point to a nullptr and crash the program
+            return true;
         } else {
-            occupiedByEnemy = false;
+            return false;
         }
     } else {
         if(board[index]->getIsWhite() || board[index]->getType() == "Padding") {
-            occupiedByEnemy = true;
+            return true;
         } else {
-            occupiedByEnemy = false;
+            return false;
         }
     }
-
-    return occupiedByEnemy;
 }
 
 
@@ -67,7 +69,7 @@ std::vector<int> basePiece::slidingMoves(const std::vector<std::unique_ptr<baseP
 
     for(int shift: shifts) {
         int distance = 1;
-        while(board[m_position + distance * shift]->getType() != "Padding") {
+        while(true) {
             if(isOccupiedByFriendly(board,m_position + distance * shift)) {
                 break;
             } else if(isOccupiedByEnemy(board, m_position + distance * shift)) {

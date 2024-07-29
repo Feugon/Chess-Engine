@@ -79,6 +79,7 @@ chessGame::chessGame(const std::string &FEN) {
             if(FEN[stringIndex] == '/') {
                 stringIndex++;
             }
+
         }
     }
 }
