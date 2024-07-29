@@ -6,7 +6,7 @@
 
 class Rook : public basePiece {
 public:
-    Rook(int postion, bool is_white): basePiece(postion, is_white) {
+    Rook(int postion, bool is_white, std::string type): basePiece(postion, is_white, type) {
         m_imageDir = is_white ? "../images/w_rook.png" : "../images/b_rook.png";
     }
     std::vector<int> generateMoves(const std::vector<int> &board) override;

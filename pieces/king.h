@@ -7,7 +7,7 @@
 
 class King : public basePiece {
 public:
-    King(int postion, bool is_white): basePiece(postion, is_white) {
+    King(int postion, bool is_white, std::string type): basePiece(postion, is_white, type) {
         m_imageDir = is_white ? "../images/w_king.png" : "../images/b_king.png";
     }
     std::vector<int> generateMoves(const std::vector<int> &board) override;

@@ -3,9 +3,10 @@
 #include "../constants.h"
 
 
-basePiece::basePiece(int position, bool is_white) {
+basePiece::basePiece(int position, bool is_white, std::string type) {
     m_position = position;
     m_isWhite = is_white;
+    m_type = type;
 }
 
 void basePiece::setIndex(int index) {

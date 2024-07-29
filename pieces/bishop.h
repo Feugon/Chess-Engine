@@ -7,7 +7,7 @@
 
 class Bishop : public basePiece {
 public:
-    Bishop(int postion, bool is_white): basePiece(postion, is_white) {
+    Bishop(int postion, bool is_white, std::string type): basePiece(postion, is_white, type) {
         m_imageDir = is_white ? "../images/w_bishop.png" : "../images/b_bishop.png";
     }
 

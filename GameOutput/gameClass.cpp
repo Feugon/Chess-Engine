@@ -30,27 +30,27 @@ chessGame::chessGame(const std::vector<int> &board) {
 
         if (pieceVal == 1) {
             // Handle Pawn
-            auto pawnPointer = std::make_unique<Pawn>(i, is_white);
+            auto pawnPointer = std::make_unique<Pawn>(i, is_white, "Pawn");
             m_indexToPiece[i] = std::move(pawnPointer);
         } else if (pieceVal == 2) {
             // Handle Knight
-            auto knightPointer = std::make_unique<Knight>(i, is_white);
+            auto knightPointer = std::make_unique<Knight>(i, is_white, "Knight");
             m_indexToPiece[i] = std::move(knightPointer);
         } else if (pieceVal == 3) {
             // Handle Bishop
-            auto bishopPointer = std::make_unique<Bishop>(i, is_white);
+            auto bishopPointer = std::make_unique<Bishop>(i, is_white, "Bishop");
             m_indexToPiece[i] = std::move(bishopPointer);
         } else if (pieceVal == 4) {
             // Handle Rook
-            auto rookPointer = std::make_unique<Rook>(i, is_white);
+            auto rookPointer = std::make_unique<Rook>(i, is_white, "Rook");
             m_indexToPiece[i] = std::move(rookPointer);
         } else if (pieceVal == 5) {
             // Handle Queen
-            auto queenPointer = std::make_unique<Queen>(i, is_white);
+            auto queenPointer = std::make_unique<Queen>(i, is_white,"Queen");
             m_indexToPiece[i] = std::move(queenPointer);
         } else if (pieceVal == 6) {
             // Handle King
-            auto kingPointer = std::make_unique<King>(i, is_white);
+            auto kingPointer = std::make_unique<King>(i, is_white, "King");
             m_indexToPiece[i] = std::move(kingPointer);
         }
 
@@ -127,7 +127,8 @@ void chessGame::selectedSetter(int mouseX, int mouseY, std::vector<int> &board) 
     // if we select the right colored piece then generate its possible moves
     if((board[m_selected] > 0 && m_whiteMove) || (board[m_selected] < 0 && !m_whiteMove)) {
         if (m_indexToPiece.count(m_selected) && m_indexToPiece[m_selected]) {
-            if(dynamic_cast<King*>(m_indexToPiece[m_selected].get())) {
+            std::cout << m_indexToPiece[m_selected]->getType();
+            if(m_indexToPiece[m_selected].get()->getType() == "King") {
                 King* king = dynamic_cast<King*>(m_indexToPiece[m_selected].get());
                 king->canCastle(m_indexToPiece, board);
             }
@@ -151,6 +152,9 @@ void chessGame::movePiece(int fromIndex, int toIndex, std::vector<int> &board ) 
 
     m_whiteMove = !m_whiteMove;
     m_selected = NULL;
+
+    //pointerBoard
+    // hello
 }
 
 

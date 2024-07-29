@@ -10,16 +10,17 @@ class basePiece {
 
 public:
 
-    basePiece(int position, bool is_white);
+    basePiece(int position, bool is_white, std::string type);
     virtual ~basePiece() = default;
 
     void draw(sf::RenderWindow& window);
     virtual std::vector<int> generateMoves(const std::vector<int> &board) = 0;
 
     virtual void setIndex(int index);
+    virtual std::string getType(){return m_type;}
 
 protected:
-
+    std::string m_type = "BasePiece";
     bool m_isWhite;
     int m_position;
     std::string m_imageDir;
