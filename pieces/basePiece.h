@@ -13,7 +13,8 @@ public:
     virtual ~basePiece() = default;
 
     void draw(sf::RenderWindow& window);
-    virtual std::vector<int> generateMoves(const std::vector<std::unique_ptr<basePiece>> &board) = 0;
+    virtual void generateMoves(const std::vector<std::unique_ptr<basePiece>> &board) = 0;
+    std::vector<int> getMoves(){return m_possibleMoves;}
 
     virtual void setIndex(int index);
     virtual std::string getType(){return m_type;}
@@ -24,6 +25,7 @@ protected:
     bool m_isWhite;
     int m_position;
     std::string m_imageDir;
+    std::vector<int> m_possibleMoves;
 
     std::vector<int> slidingMoves(const std::vector<std::unique_ptr<basePiece>> &board, const std::vector<int> &shifts);
     bool isOccupiedByFriendly(const std::vector<std::unique_ptr<basePiece>> &board, int  index);

@@ -22,7 +22,7 @@
 // Creates a vector of pointers of the pieces based on the FEN string
 chessGame::chessGame(const std::string &FEN) {
 
-    m_whiteMove = true;
+    m_whiteToMove = true;
     int stringIndex = 0;
 
     for (int i=0; i<120; i++) {
@@ -82,6 +82,7 @@ chessGame::chessGame(const std::string &FEN) {
 
         }
     }
+    generateMoves();
 }
 
 
@@ -115,7 +116,7 @@ void chessGame::drawPossibleMoves(sf::RenderWindow &window) {
 
     std::vector<int> moves;
     moves.push_back(m_selected);
-    moves.insert(moves.end(), m_availableMoves.begin(), m_availableMoves.end());
+    moves.insert(moves.end(), m_moveChoices.begin(), m_moveChoices.end());
 
 
     // Draw the initial square and all generated move squares
@@ -133,6 +134,7 @@ void chessGame::drawPossibleMoves(sf::RenderWindow &window) {
 }
 
 
+
 void chessGame::selectedSetter(int mouseX, int mouseY) {
 
     int x = mouseX / constants::TILE_WIDTH;
@@ -140,20 +142,18 @@ void chessGame::selectedSetter(int mouseX, int mouseY) {
     m_selected = 21 + (10*y) + x;
 
 
-
     // checks if we are moving the piece
-    bool selectedMove = std::find(m_availableMoves.begin(), m_availableMoves.end(), m_selected) != m_availableMoves.end();
+    bool selectedMove = std::find(m_moveChoices.begin(), m_moveChoices.end(), m_selected) != m_moveChoices.end();
     if (selectedMove) {
         movePiece(m_lastSelected,m_selected);
     }
 
+    m_moveChoices.clear();
 
-    m_availableMoves.clear();
-
-    // if we select the right colored piece then generate its possible moves
+    // if we select the right colored piece then gets its possible moves
     if(m_board[m_selected]) {
-        if((m_board[m_selected]->getIsWhite() && m_whiteMove) || (!m_board[m_selected]->getIsWhite() && !m_whiteMove)) {
-            m_availableMoves = m_board[m_selected]->generateMoves(m_board);
+        if((m_board[m_selected]->getIsWhite() && m_whiteToMove) || (!m_board[m_selected]->getIsWhite() && !m_whiteToMove)) {
+            m_moveChoices = m_board[m_selected]->getMoves();
         }
     }
 
@@ -175,6 +175,26 @@ void chessGame::castle(bool kingsideCastle) {
 
 
 
+void chessGame::generateMoves() {
+
+    m_whiteMoves.clear();
+    m_blackMoves.clear();
+
+    for (auto& piece : m_board) {
+        if(piece != nullptr){
+            if(piece->getType() != "Padding" && piece->getIsWhite()) {
+                piece->generateMoves(m_board);
+                m_whiteMoves.insert(m_whiteMoves.end(), piece->getMoves().begin(), piece->getMoves().end());
+            } else if (piece->getType() != "Padding" && !piece->getIsWhite()) {
+                piece->generateMoves(m_board);
+                m_blackMoves.insert(m_blackMoves.end(), piece->getMoves().begin(), piece->getMoves().end());
+            }
+        }
+
+    }
+}
+
+
 
 
 void chessGame::movePiece(int fromIndex, int toIndex) {
@@ -191,9 +211,10 @@ void chessGame::movePiece(int fromIndex, int toIndex) {
 
 
 
-    m_whiteMove = !m_whiteMove;
-    m_selected = NULL;
+    m_whiteToMove = !m_whiteToMove;
+    m_selected = NULL; // TODO rethink this
 
+    generateMoves();
 }
 
 

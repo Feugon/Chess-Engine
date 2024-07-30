@@ -17,9 +17,13 @@ public:
 private:
     int m_selected;
     int m_lastSelected;
-    bool m_whiteMove;
-    std::vector<int> m_availableMoves;
+    bool m_whiteToMove;
+    std::vector<int> m_moveChoices;
+    std::vector<int> m_whiteMoves;
+    std::vector<int> m_blackMoves;
     std::vector<std::unique_ptr<basePiece>> m_board;
+
+    void generateMoves();
     void movePiece(int fromIndex, int toIndex);
     void castle(bool kingsideCastle);
 };
