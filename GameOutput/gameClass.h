@@ -21,4 +21,5 @@ private:
     std::vector<int> m_availableMoves;
     std::vector<std::unique_ptr<basePiece>> m_board;
     void movePiece(int fromIndex, int toIndex);
+    void castle(bool kingsideCastle);
 };

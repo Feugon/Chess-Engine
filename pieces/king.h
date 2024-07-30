@@ -12,7 +12,7 @@ public:
     }
     std::vector<int> generateMoves(const std::vector<std::unique_ptr<basePiece>> &board) override;
     void setIndex(int index) override;
-    void canCastle(std::unordered_map<int, std::unique_ptr<basePiece>> &pointerMap);
+    void canCastle(const std::vector<std::unique_ptr<basePiece>> &board);
 
 
 private:

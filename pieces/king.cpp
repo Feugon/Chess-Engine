@@ -6,25 +6,23 @@
 #include <iostream>
 
 
-void King::canCastle(std::unordered_map<int, std::unique_ptr<basePiece>> &pointerMap) {
-/*
-    bool kingRookPresent = board[m_position + 3] == 4 || board[m_position + 3] == - 4;
-    bool queenRookPresent = board[m_position - 4] == 4 || board[m_position - 4] == -4;
-    bool kingsRookMoved;
-    bool queenRookMoved;
-
-    if(kingRookPresent) {
-        Rook* kingRook = dynamic_cast<Rook*>(pointerMap[m_position + 3].get());
-        kingsRookMoved = kingRook->m_hasMoved;
-
-    }
-    if(queenRookPresent) {
-        Rook* queenRook = dynamic_cast<Rook*>(pointerMap[m_position - 4].get());
-        queenRookMoved = queenRook->m_hasMoved;
-        std::cout << queenRookMoved;
-    }
+void King::canCastle(const std::vector <std::unique_ptr<basePiece>> &board) {
 
     if(!m_hasMoved) {
+        bool kingRookPresent = board[m_position + 3]->getType() == "Rook";
+        bool queenRookPresent = board[m_position - 4]->getType() == "Rook";
+        bool kingsRookMoved;
+        bool queenRookMoved;
+
+        if(kingRookPresent) {
+            Rook* kingRook = dynamic_cast<Rook*>(board[m_position + 3].get());
+            kingsRookMoved = kingRook->m_hasMoved;
+        }
+        if(queenRookPresent) {
+            Rook* queenRook = dynamic_cast<Rook*>(board[m_position - 4].get());
+            queenRookMoved = queenRook->m_hasMoved;
+        }
+
         bool kingsideEmpty = isSquareEmpty(board,m_position + 1) && isSquareEmpty(board,m_position + 2);
         bool queensideEmpty = isSquareEmpty(board,m_position - 1) && isSquareEmpty(board,m_position - 2) && isSquareEmpty(board,m_position - 3);
         if(!kingsRookMoved && kingsideEmpty) {
@@ -34,7 +32,7 @@ void King::canCastle(std::unordered_map<int, std::unique_ptr<basePiece>> &pointe
             m_canQueensideCastle = true;
         }
     }
-    */
+
 }
 
 
@@ -53,6 +51,8 @@ std::vector<int> King::generateMoves(const std::vector<std::unique_ptr<basePiece
         }
     }
 
+    canCastle(board);
+
    if (m_canKingsideCastle) {
        possibleMoves.push_back(m_position + 2);
    }
@@ -67,8 +67,6 @@ std::vector<int> King::generateMoves(const std::vector<std::unique_ptr<basePiece
 void King::setIndex(int index) {
     m_position = index;
     m_hasMoved = true;
-
-    if(m_position - index == -2 || m_position - index == 2) {
-
-    }
+    m_canKingsideCastle = false;
+    m_canQueensideCastle = false;
 }

@@ -161,12 +161,34 @@ void chessGame::selectedSetter(int mouseX, int mouseY) {
 }
 
 
+void chessGame::castle(bool kingsideCastle) {
+    if(kingsideCastle) {
+        m_board[m_lastSelected + 3]->setIndex(m_lastSelected + 1);
+        m_board[m_lastSelected + 1] = std::move(m_board[m_lastSelected + 3]);
+        m_board[m_lastSelected + 3] = nullptr;
+    } else {
+        m_board[m_lastSelected - 4]->setIndex(m_lastSelected - 1);
+        m_board[m_lastSelected - 1] = std::move(m_board[m_lastSelected - 4]);
+        m_board[m_lastSelected - 4] = nullptr;
+    }
+}
+
+
+
+
+
 void chessGame::movePiece(int fromIndex, int toIndex) {
 
-    m_board[fromIndex]->setIndex(toIndex);
+    if(m_board[fromIndex]->getType() == "King" && toIndex - fromIndex == 2) {
+        castle(true);
+    } else if (m_board[fromIndex]->getType() == "King" && toIndex - fromIndex == -2) {
+        castle(false);
+    }
 
+    m_board[fromIndex]->setIndex(toIndex);
     m_board[toIndex] = std::move(m_board[fromIndex]);
     m_board[fromIndex] = nullptr;
+
 
 
     m_whiteMove = !m_whiteMove;
