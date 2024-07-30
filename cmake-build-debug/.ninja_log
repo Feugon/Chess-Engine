@@ -1,7 +1,7 @@
 # ninja log v6
 9	435	1722302406954025180	CMakeFiles/Chess.dir/GameOutput/gameClass.cpp.o	954b6bf856bdeab3
 7	481	1722295470733954526	CMakeFiles/Chess.dir/pieces/basePiece.cpp.o	4315140c2daf322b
-1	58	1722303046294569211	build.ninja	e55f8bf9fcde0627
+1	58	1722303281280480996	build.ninja	e55f8bf9fcde0627
 12	620	1722283027848445584	CMakeFiles/Chess.dir/pieces/queen.cpp.o	4282fd80d7ae89dd
 500	547	1722302653079784455	Chess	6ed1f5a7331b4d36
 8	393	1721600547271860756	CMakeFiles/Chess.dir/GameOutput/draw.cpp.o	22e80112756c1bcc
@@ -11,7 +11,7 @@
 8	500	1722302652588233337	CMakeFiles/Chess.dir/pieces/king.cpp.o	f52cced665ff1810
 8	449	1722302219407886705	CMakeFiles/Chess.dir/main.cpp.o	314bdb9d08199551
 12	623	1722283027848241624	CMakeFiles/Chess.dir/pieces/rook.cpp.o	c08963d74bb80c68
-4	547	1722277201929336786	CMakeFiles/Chess.dir/BoardRepresentation.cpp.o	fdb07b6e34145e5f
-8	156	1721328070867251854	CMakeFiles/Chess.dir/pieceMovement.cpp.o	4808feec4f92ac92
 11	622	1722283027847387659	CMakeFiles/Chess.dir/pieces/bishop.cpp.o	54d4365449511b64
+8	156	1721328070867251854	CMakeFiles/Chess.dir/pieceMovement.cpp.o	4808feec4f92ac92
+4	547	1722277201929336786	CMakeFiles/Chess.dir/BoardRepresentation.cpp.o	fdb07b6e34145e5f
 10	457	1721839690996036350	CMakeFiles/Chess.dir/pieces/pieceMovement.cpp.o	50ec0dceb9d5b800
