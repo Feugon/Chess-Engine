@@ -7,7 +7,6 @@
 
 void King::canCastle(const std::vector <std::unique_ptr<basePiece>> &board) {
 
-    inCheck(board);
 
     if(!m_hasMoved) {
         bool kingRookPresent = false;
@@ -42,31 +41,38 @@ void King::canCastle(const std::vector <std::unique_ptr<basePiece>> &board) {
 
 
 
-void King::generateMoves(const std::vector<std::unique_ptr<basePiece>> &board) {
+void King::generateMoves(std::vector<std::unique_ptr<basePiece>> &board) {
 
     m_possibleMoves.clear();
+    std::vector<int> potentialMoves;
     // this corresponds to position shifts for a king
     int shifts[8] = {11,10,9,1,-1,-9,-10,-11};
 
+
     for(int shift : shifts) {
         if(!isOccupiedByFriendly(board,m_position + shift)) {
-            m_possibleMoves.push_back(m_position + shift);
+            potentialMoves.push_back(m_position + shift);
         }
     }
 
     canCastle(board);
-
    if (m_canKingsideCastle) {
-       m_possibleMoves.push_back(m_position + 2);
+       potentialMoves.push_back(m_position + 2);
    }
    if (m_canQueensideCastle) {
-       m_possibleMoves.push_back(m_position - 2);
+       potentialMoves.push_back(m_position - 2);
    }
+
+    for(int move: potentialMoves) {
+        if(legalMove(board, m_position, move)) {
+            m_possibleMoves.push_back(move);
+        }
+    }
 
 }
 
 
-bool King::inCheck(const std::vector<std::unique_ptr<basePiece> > &board) {
+bool King::inCheck( std::vector<std::unique_ptr<basePiece>> &board) {
     if(m_isWhite) {
         //check if pawns are checking
         if(!isSquareEmpty(board, m_position - 9)) {
@@ -138,4 +144,10 @@ void King::setIndex(int index) {
     m_hasMoved = true;
     m_canKingsideCastle = false;
     m_canQueensideCastle = false;
+
+    if(m_isWhite) {
+        basePiece::m_whiteKingPosition = index;
+    } else {
+        basePiece::m_blackKingPosition = index;
+    }
 }

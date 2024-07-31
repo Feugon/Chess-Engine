@@ -73,6 +73,12 @@ chessGame::chessGame(const std::string &FEN) {
                 // Handle King
                 auto kingPointer = std::make_unique<King>(i, is_white, "King");
                 m_board.push_back(std::move(kingPointer));
+
+                if(is_white) {
+                    m_whiteKingPosition = i;
+                } else {
+                    m_blackKingPosition = i;
+                }
             }
 
             stringIndex++;
@@ -82,7 +88,7 @@ chessGame::chessGame(const std::string &FEN) {
 
         }
     }
-    generateMoves();
+    identifyMoves();
 }
 
 
@@ -152,8 +158,10 @@ void chessGame::selectedSetter(int mouseX, int mouseY) {
 
     // if we select the right colored piece then gets its possible moves
     if(m_board[m_selected]) {
-        if((m_board[m_selected]->getIsWhite() && m_whiteToMove) || (!m_board[m_selected]->getIsWhite() && !m_whiteToMove)) {
-            m_moveChoices = m_board[m_selected]->getMoves();
+        if((m_board[m_selected]->getIsWhite() && m_whiteToMove)) {
+            m_moveChoices = m_whiteMoves[m_selected];
+        } else if ( (!m_board[m_selected]->getIsWhite() && !m_whiteToMove)) {
+            m_moveChoices = m_blackMoves[m_selected];
         }
     }
 
@@ -174,23 +182,21 @@ void chessGame::castle(bool kingsideCastle) {
 }
 
 
-
-void chessGame::generateMoves() {
+void chessGame::identifyMoves() {
 
     m_whiteMoves.clear();
     m_blackMoves.clear();
 
     for (auto& piece : m_board) {
         if(piece != nullptr){
-            if(piece->getType() != "Padding" && piece->getIsWhite()) {
+            if(piece->getType() != "Padding" && piece->getIsWhite() && m_whiteToMove) {
                 piece->generateMoves(m_board);
-                m_whiteMoves.insert(m_whiteMoves.end(), piece->getMoves().begin(), piece->getMoves().end());
-            } else if (piece->getType() != "Padding" && !piece->getIsWhite()) {
+                m_whiteMoves[piece->getPosition()] = piece->getMoves();
+            } else if (piece->getType() != "Padding" && !piece->getIsWhite() && !m_whiteToMove) {
                 piece->generateMoves(m_board);
-                m_blackMoves.insert(m_blackMoves.end(), piece->getMoves().begin(), piece->getMoves().end());
+                m_blackMoves[piece->getPosition()] = piece->getMoves();
             }
         }
-
     }
 }
 
@@ -199,22 +205,27 @@ void chessGame::generateMoves() {
 
 void chessGame::movePiece(int fromIndex, int toIndex) {
 
-    if(m_board[fromIndex]->getType() == "King" && toIndex - fromIndex == 2) {
-        castle(true);
-    } else if (m_board[fromIndex]->getType() == "King" && toIndex - fromIndex == -2) {
-        castle(false);
+    if(m_board[fromIndex]->getType() == "King") {
+        if( toIndex - fromIndex == 2) {
+            castle(true);
+        } else if ( toIndex - fromIndex == -2) {
+            castle(false);
+        }
+        if(m_board[fromIndex]->getIsWhite()){m_whiteKingPosition = toIndex;} else {m_blackKingPosition = toIndex;}
     }
 
     m_board[fromIndex]->setIndex(toIndex);
+
     m_board[toIndex] = std::move(m_board[fromIndex]);
     m_board[fromIndex] = nullptr;
 
 
 
     m_whiteToMove = !m_whiteToMove;
-    m_selected = NULL; // TODO rethink this
+    m_selected = 0;
 
-    generateMoves();
+    identifyMoves();
+
 }
 
 

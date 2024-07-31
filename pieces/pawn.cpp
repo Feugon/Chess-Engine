@@ -4,7 +4,7 @@
 
 // TODO add promotion
 
-void Pawn::generateMoves(const std::vector<std::unique_ptr<basePiece>> &board) {
+void Pawn::generateMoves(std::vector<std::unique_ptr<basePiece>> &board) {
 
     m_possibleMoves.clear();
 

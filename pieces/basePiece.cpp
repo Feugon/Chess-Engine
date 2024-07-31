@@ -3,6 +3,9 @@
 #include "../constants.h"
 
 
+int basePiece::m_whiteKingPosition = 0;
+int basePiece::m_blackKingPosition = 0;
+
 basePiece::basePiece(int position, bool is_white, std::string type) {
     m_position = position;
     m_isWhite = is_white;
@@ -47,13 +50,13 @@ bool basePiece::isOccupiedByEnemy(const std::vector<std::unique_ptr<basePiece>> 
     if(board[index] == nullptr) {
         return false;
     } else if(m_isWhite) {
-        if(!board[index]->getIsWhite() || board[index]->getType() == "Padding") {  // this could point to a nullptr and crash the program
+        if(!board[index]->getIsWhite() && board[index]->getType() != "Padding") {
             return true;
         } else {
             return false;
         }
     } else {
-        if(board[index]->getIsWhite() || board[index]->getType() == "Padding") {
+        if(board[index]->getIsWhite() && board[index]->getType() != "Padding") {
             return true;
         } else {
             return false;
@@ -63,7 +66,7 @@ bool basePiece::isOccupiedByEnemy(const std::vector<std::unique_ptr<basePiece>> 
 
 
 
-std::vector<int> basePiece::slidingMoves(const std::vector<std::unique_ptr<basePiece>> &board, const std::vector<int> &shifts) {
+std::vector<int> basePiece::slidingMoves(std::vector<std::unique_ptr<basePiece>> &board, const std::vector<int> &shifts) {
 
     std::vector<int> possibleMoves;
 
@@ -84,6 +87,41 @@ std::vector<int> basePiece::slidingMoves(const std::vector<std::unique_ptr<baseP
 
     return possibleMoves;
 }
+
+
+
+bool basePiece::legalMove(std::vector<std::unique_ptr<basePiece>> &board, int from, int to) {
+
+    bool isLegalMove;
+
+    std::unique_ptr<basePiece> captured = std::move(board[to]);
+    board[to] = std::move(board[from]);
+    board[from] = nullptr;
+
+    //This doesn't work with king
+    if(m_isWhite) {
+        if(board[to]->getType() != "King") {
+            isLegalMove = !(board[m_whiteKingPosition]->inCheck(board));
+        } else {
+            isLegalMove = !(board[to]->inCheck(board));
+        }
+    } else {
+        if(board[to]->getType() != "King") {
+            isLegalMove = !(board[m_blackKingPosition]->inCheck(board));
+        } else {
+            isLegalMove = !(board[to]->inCheck(board));
+        }
+    }
+
+    board[from] = std::move(board[to]);
+    board[to] = std::move(captured);
+
+
+    return isLegalMove;
+}
+
+
+
 
 
 
