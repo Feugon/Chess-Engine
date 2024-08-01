@@ -12,7 +12,7 @@ basePiece::basePiece(int position, bool is_white, std::string type) {
     m_type = type;
 }
 
-void basePiece::setIndex(int index) {
+void basePiece::move(int index) {
     m_position = index;
 }
 
@@ -94,25 +94,32 @@ bool basePiece::legalMove(std::vector<std::unique_ptr<basePiece>> &board, int fr
 
     bool isLegalMove;
 
+    // move the pieces in the pointer board
     std::unique_ptr<basePiece> captured = std::move(board[to]);
     board[to] = std::move(board[from]);
     board[from] = nullptr;
 
-    //This doesn't work with king
+
+    // check if the king is in check
     if(m_isWhite) {
         if(board[to]->getType() != "King") {
             isLegalMove = !(board[m_whiteKingPosition]->inCheck(board));
         } else {
+            board[to]->setIndex(to);                        // this changes position member
             isLegalMove = !(board[to]->inCheck(board));
+            board[to]->setIndex(from);                     // this undoes the m_position change
         }
     } else {
         if(board[to]->getType() != "King") {
             isLegalMove = !(board[m_blackKingPosition]->inCheck(board));
         } else {
+            board[to]->setIndex(to);
             isLegalMove = !(board[to]->inCheck(board));
+            board[to]->setIndex(from);
         }
     }
 
+    // undo the move
     board[from] = std::move(board[to]);
     board[to] = std::move(captured);
 

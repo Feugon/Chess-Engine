@@ -10,7 +10,7 @@ public:
         m_imageDir = is_white ? "../images/w_rook.png" : "../images/b_rook.png";
     }
     void generateMoves(std::vector<std::unique_ptr<basePiece>> &board) override;
-    void setIndex(int index) override;
+    void move(int index) override;
 
     friend class King;
 private:

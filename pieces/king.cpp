@@ -72,7 +72,7 @@ void King::generateMoves(std::vector<std::unique_ptr<basePiece>> &board) {
 }
 
 
-bool King::inCheck( std::vector<std::unique_ptr<basePiece>> &board) {
+bool King::inCheck(std::vector<std::unique_ptr<basePiece>> &board) {
     if(m_isWhite) {
         //check if pawns are checking
         if(!isSquareEmpty(board, m_position - 9)) {
@@ -139,7 +139,7 @@ bool King::inCheck( std::vector<std::unique_ptr<basePiece>> &board) {
 
 
 
-void King::setIndex(int index) {
+void King::move(int index) {
     m_position = index;
     m_hasMoved = true;
     m_canKingsideCastle = false;

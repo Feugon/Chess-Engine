@@ -16,7 +16,8 @@ public:
     virtual void generateMoves(std::vector<std::unique_ptr<basePiece>> &board) = 0;
     std::vector<int> getMoves(){return m_possibleMoves;}
     int getPosition(){return m_position;}
-    virtual void setIndex(int index);
+    virtual void move(int index);
+    virtual void setIndex(int index){}
     virtual bool inCheck(std::vector<std::unique_ptr<basePiece>> &board){return false;}
     virtual std::string getType(){return m_type;}
     virtual bool getIsWhite(){return m_isWhite;}
