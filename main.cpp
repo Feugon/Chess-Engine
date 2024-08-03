@@ -49,6 +49,8 @@ int main() {
 
             shouldUpdate = false;
         }
+
+
         // prevents cpu from bottlenecking
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }

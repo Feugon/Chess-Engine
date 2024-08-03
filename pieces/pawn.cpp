@@ -2,7 +2,6 @@
 #include "basePiece.h"
 #include <vector>
 
-// TODO add promotion
 
 void Pawn::generateMoves(std::vector<std::unique_ptr<basePiece>> &board) {
 

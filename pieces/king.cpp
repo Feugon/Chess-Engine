@@ -5,10 +5,12 @@
 #include <iostream>
 
 
-void King::canCastle(const std::vector <std::unique_ptr<basePiece>> &board) {
+void King::canCastle(std::vector <std::unique_ptr<basePiece>> &board) {
 
+    m_canKingsideCastle = false;
+    m_canQueensideCastle = false;
 
-    if(!m_hasMoved) {
+    if(!m_hasMoved && !(this->inCheck(board))) {
         bool kingRookPresent = false;
         bool queenRookPresent = false;
         if(!isSquareEmpty(board,m_position+3)){kingRookPresent = board[m_position + 3]->getType() == "Rook";}
@@ -28,10 +30,12 @@ void King::canCastle(const std::vector <std::unique_ptr<basePiece>> &board) {
 
         bool kingsideEmpty = isSquareEmpty(board,m_position + 1) && isSquareEmpty(board,m_position + 2);
         bool queensideEmpty = isSquareEmpty(board,m_position - 1) && isSquareEmpty(board,m_position - 2) && isSquareEmpty(board,m_position - 3);
-        if(!kingsRookMoved && kingsideEmpty) {
+
+        // legal move part checks if the rook would be under attack by pretending its a king
+        if(!kingsRookMoved && kingsideEmpty && legalMove(board,m_position,m_position+1)) {
             m_canKingsideCastle = true;
         }
-        if(!queenRookMoved && queensideEmpty) {
+        if(!queenRookMoved && queensideEmpty && legalMove(board,m_position,m_position-1)) {
             m_canQueensideCastle = true;
         }
     }

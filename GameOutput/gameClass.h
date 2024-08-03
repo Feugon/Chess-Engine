@@ -29,13 +29,3 @@ private:
     void movePiece(int fromIndex, int toIndex);
     void castle(bool kingsideCastle);
 };
-
-
-/* Plan to find legal moves:
- * Keep track of kings positions                 |x|
- * Pass a board with the hypothetical move
- * check if king is in check
- * if it is then mark the move illegal
- * somehow remove the move from list of legal moves
- * animate the moves based on the whiteMoves hashmap or something
- */
