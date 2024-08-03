@@ -186,18 +186,35 @@ void chessGame::identifyMoves() {
 
     m_whiteMoves.clear();
     m_blackMoves.clear();
+    bool hasMoves = false;
 
     for (auto& piece : m_board) {
         if(piece != nullptr){
             if(piece->getType() != "Padding" && piece->getIsWhite() && m_whiteToMove) {
                 piece->generateMoves(m_board);
-                m_whiteMoves[piece->getPosition()] = piece->getMoves();
+                // can add check to see if piece can move if not then don't add it to the moves map
+                if((piece->getMoves()).size() != 0) {
+                    m_whiteMoves[piece->getPosition()] = piece->getMoves();
+                    hasMoves = true;
+                }
             } else if (piece->getType() != "Padding" && !piece->getIsWhite() && !m_whiteToMove) {
                 piece->generateMoves(m_board);
-                m_blackMoves[piece->getPosition()] = piece->getMoves();
+                if((piece->getMoves()).size() != 0) {
+                    m_blackMoves[piece->getPosition()] = piece->getMoves();
+                    hasMoves = true;
+                }
             }
         }
     }
+
+    //checkmate detection
+    if(!hasMoves && m_whiteToMove && m_board[m_whiteKingPosition]->inCheck(m_board)) {
+        std::cout << "Black Wins!";
+    } else if (!hasMoves && !m_whiteToMove && m_board[m_blackKingPosition]->inCheck(m_board)) {
+        std::cout << "White Wins!";
+    }
+
+
 }
 
 
@@ -205,19 +222,39 @@ void chessGame::identifyMoves() {
 
 void chessGame::movePiece(int fromIndex, int toIndex) {
 
+    // check for castling logic
     if(m_board[fromIndex]->getType() == "King") {
         if( toIndex - fromIndex == 2) {
             castle(true);
         } else if ( toIndex - fromIndex == -2) {
             castle(false);
         }
-        if(m_board[fromIndex]->getIsWhite()){m_whiteKingPosition = toIndex;} else {m_blackKingPosition = toIndex;}
+
+        if(m_board[fromIndex]->getIsWhite()) {
+            m_whiteKingPosition = toIndex;
+        } else {
+            m_blackKingPosition = toIndex;
+        }
+        m_board[fromIndex]->move(toIndex);
+        m_board[toIndex] = std::move(m_board[fromIndex]);
+        m_board[fromIndex] = nullptr;
+    // handles promotion (defaults to queen, should add other pieces at some point)
+    } else if(m_board[fromIndex]->getType() == "Pawn" && (toIndex / 10 == 2 || toIndex / 10 == 9)) {
+        if(toIndex / 10 == 2 && m_board[fromIndex]->getIsWhite()) {
+            auto queenPointer = std::make_unique<Queen>(toIndex,true,"Queen");
+            m_board[toIndex] = std::move(queenPointer);
+            m_board[fromIndex] = nullptr;
+        } else if (toIndex / 10 == 9 && !(m_board[fromIndex]->getIsWhite())) {
+            auto queenPointer = std::make_unique<Queen>(toIndex,false,"Queen");
+            m_board[toIndex] = std::move(queenPointer);
+            m_board[fromIndex] = nullptr;
+        }
+    } else {
+        m_board[fromIndex]->move(toIndex);
+        m_board[toIndex] = std::move(m_board[fromIndex]);
+        m_board[fromIndex] = nullptr;
     }
 
-    m_board[fromIndex]->move(toIndex);
-
-    m_board[toIndex] = std::move(m_board[fromIndex]);
-    m_board[fromIndex] = nullptr;
 
 
 

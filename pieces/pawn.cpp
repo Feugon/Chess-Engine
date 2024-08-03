@@ -35,5 +35,6 @@ void Pawn::generateMoves(std::vector<std::unique_ptr<basePiece>> &board) {
             m_possibleMoves.push_back(move);
         }
     }
-
 }
+
+

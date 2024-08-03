@@ -1,16 +1,16 @@
-#include "BoardRepresentation.h"
 #include "GameOutput/gameClass.h"
 #include <SFML/Graphics.hpp>
+#include <thread>
+#include <chrono>
 #include <iostream>
 #include <vector>
 
-// SOOO the cpu is bottlenecking, mighttttt want to look into that
+
 
 
 int main() {
-    std::vector<int> board = boardMatrix("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
-
     sf::RenderWindow window(sf::VideoMode(640, 640), "Chess Board");
+    window.setFramerateLimit(60);
 
     chessGame game("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
 
@@ -49,6 +49,8 @@ int main() {
 
             shouldUpdate = false;
         }
+        // prevents cpu from bottlenecking
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 
 
