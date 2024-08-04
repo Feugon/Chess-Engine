@@ -24,6 +24,7 @@ public:
 
     static int m_whiteKingPosition;
     static int m_blackKingPosition;
+    static int m_enPassantPosition;
 protected:
     std::string m_type = "BasePiece";
     bool m_isWhite;

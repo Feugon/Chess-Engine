@@ -5,6 +5,7 @@
 
 int basePiece::m_whiteKingPosition = 0;
 int basePiece::m_blackKingPosition = 0;
+int basePiece::m_enPassantPosition = 0;
 
 basePiece::basePiece(int position, bool is_white, std::string type) {
     m_position = position;
@@ -13,6 +14,7 @@ basePiece::basePiece(int position, bool is_white, std::string type) {
 }
 
 void basePiece::move(int index) {
+    basePiece::m_enPassantPosition = 0;
     m_position = index;
 }
 

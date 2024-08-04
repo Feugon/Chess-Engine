@@ -207,6 +207,10 @@ void chessGame::identifyMoves() {
         }
     }
 
+    if(m_board[m_blackKingPosition]->inCheck(m_board)){
+        std::cout << "black in check! ";
+    }
+
     //checkmate detection
     if(!hasMoves && m_whiteToMove && m_board[m_whiteKingPosition]->inCheck(m_board)) {
         std::cout << "Black Wins!";
@@ -249,6 +253,21 @@ void chessGame::movePiece(int fromIndex, int toIndex) {
             m_board[toIndex] = std::move(queenPointer);
             m_board[fromIndex] = nullptr;
         }
+    // handles en Passant (this should be cleaned up)
+    } else if(m_board[fromIndex]->getType() == "Pawn" && toIndex % 10 != fromIndex % 10 && m_board[toIndex] == nullptr) {
+        if(fromIndex - toIndex == 9) {
+            m_board[fromIndex + 1] = nullptr;
+        } else if (fromIndex - toIndex == 11) {
+            m_board[fromIndex - 1] = nullptr;
+        } else if(fromIndex - toIndex == -9) {
+            m_board[fromIndex - 1] = nullptr;
+        } else if (fromIndex - toIndex == -11) {
+            m_board[fromIndex + 1] = nullptr;
+        }
+        m_board[fromIndex]->move(toIndex);
+        m_board[toIndex] = std::move(m_board[fromIndex]);
+        m_board[fromIndex] = nullptr;
+
     } else {
         m_board[fromIndex]->move(toIndex);
         m_board[toIndex] = std::move(m_board[fromIndex]);
@@ -261,10 +280,21 @@ void chessGame::movePiece(int fromIndex, int toIndex) {
     m_whiteToMove = !m_whiteToMove;
     m_selected = 0;
 
+
     identifyMoves();
 
 }
 
 
 
+/*
+21 22 23 24 25 26 27 28
+31 32 33 34 35 36 37 38
+41 42 43 44 45 46 47 48
+51 52 53 54 55 56 57 58
+61 62 63 64 65 66 67 68
+71 72 73 74 75 76 77 78
+81 82 83 84 85 86 87 88
+91 92 93 94 95 96 97 98
+*/
 
