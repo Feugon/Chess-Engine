@@ -83,7 +83,8 @@ bool King::inCheck(std::vector<std::unique_ptr<basePiece>> &board) {
             if(board[m_position - 9]->getType() == "Pawn" && !(board[m_position - 9]->getIsWhite())) {
                 return true;
             }
-        } else if(!isSquareEmpty(board, m_position - 11)) {
+        }
+        if(!isSquareEmpty(board, m_position - 11)) {
             if(board[m_position - 11]->getType() == "Pawn" && !(board[m_position - 11]->getIsWhite())) {
                 return true;
             }
@@ -93,7 +94,8 @@ bool King::inCheck(std::vector<std::unique_ptr<basePiece>> &board) {
             if(board[m_position + 9]->getType() == "Pawn" && (board[m_position + 9]->getIsWhite())) {
                 return true;
             }
-        } else if(!isSquareEmpty(board, m_position + 11)) {
+        }
+        if(!isSquareEmpty(board, m_position + 11)) {
             if(board[m_position + 11]->getType() == "Pawn" && (board[m_position + 11]->getIsWhite())) {
                 return true;
             }

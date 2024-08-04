@@ -12,6 +12,7 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(640, 640), "Chess Board");
     window.setFramerateLimit(60);
 
+    //rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
     chessGame game("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
 
     // initial draw
