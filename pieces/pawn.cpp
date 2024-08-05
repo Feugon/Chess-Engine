@@ -26,7 +26,8 @@ void Pawn::generateMoves(std::vector<std::unique_ptr<basePiece>> &board) {
             if(board[m_position - 1]->getType() == "Pawn" && m_position - 1 == basePiece::m_enPassantPosition) {
                 potentialMoves.push_back(m_position - 11);
             }
-        } else if(m_position / 10 == 5 && !isSquareEmpty(board, m_position + 1)) {
+        }
+        if(m_position / 10 == 5 && !isSquareEmpty(board, m_position + 1)) {
             if(board[m_position + 1]->getType() == "Pawn" && m_position + 1 == basePiece::m_enPassantPosition) {
                 potentialMoves.push_back(m_position - 9);
             }
@@ -43,7 +44,8 @@ void Pawn::generateMoves(std::vector<std::unique_ptr<basePiece>> &board) {
             if(board[m_position - 1]->getType() == "Pawn" && m_position - 1 == basePiece::m_enPassantPosition) {
                 potentialMoves.push_back(m_position + 9);
             }
-        } else if(m_position / 10 == 6 && !isSquareEmpty(board, m_position + 1)) {
+        }
+        if(m_position / 10 == 6 && !isSquareEmpty(board, m_position + 1)) {
             if(board[m_position + 1]->getType() == "Pawn" && m_position + 1 == basePiece::m_enPassantPosition) {
                 potentialMoves.push_back(m_position + 11);
             }

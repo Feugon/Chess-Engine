@@ -12,19 +12,25 @@ public:
     basePiece(int position, bool is_white, std::string type);
     virtual ~basePiece() = default;
 
+
     void draw(sf::RenderWindow& window);
     virtual void generateMoves(std::vector<std::unique_ptr<basePiece>> &board) = 0;
-    std::vector<int> getMoves(){return m_possibleMoves;}
-    int getPosition(){return m_position;}
+
+
     virtual void move(int index);
-    virtual void setIndex(int index){}
+    virtual void setIndex(int index){} // this will be deleted
     virtual bool inCheck(std::vector<std::unique_ptr<basePiece>> &board){return false;}
+
+
+    int getPosition(){return m_position;}
+    std::vector<int> getMoves(){return m_possibleMoves;}
     virtual std::string getType(){return m_type;}
     virtual bool getIsWhite(){return m_isWhite;}
 
     static int m_whiteKingPosition;
     static int m_blackKingPosition;
     static int m_enPassantPosition;
+
 protected:
     std::string m_type = "BasePiece";
     bool m_isWhite;

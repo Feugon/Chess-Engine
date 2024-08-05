@@ -3,9 +3,12 @@
 #include <vector>
 #include <unordered_map>
 #include <memory>
-#include <vector>
 #include "../pieces/basePiece.h"
 
+struct Move {
+    int from;
+    int to;
+};
 
 class chessGame {
 
@@ -14,7 +17,7 @@ public:
     void drawPosition(sf::RenderWindow &window);
     void drawPossibleMoves(sf::RenderWindow &window);
     void selectedSetter(int mouseX, int mouseY);
-    std::unordered_map<int,std::vector<int>> getMoves(bool whiteMoves);
+    std::vector<Move> getMoves();
 private:
     int m_selected;
     int m_lastSelected;
@@ -22,11 +25,14 @@ private:
     int m_blackKingPosition;
     bool m_whiteToMove;
     std::vector<int> m_moveChoices;
-    std::unordered_map<int,std::vector<int>> m_whiteMoves;
-    std::unordered_map<int,std::vector<int>> m_blackMoves;
+    std::vector<Move> m_whiteMoves;
+    std::vector<Move>  m_blackMoves;
     std::vector<std::unique_ptr<basePiece>> m_board;
 
     void identifyMoves();
-    void movePiece(int fromIndex, int toIndex);
+    void makeMove(Move move);
+    void unmakeMove(Move move);
     void castle(bool kingsideCastle);
 };
+
+

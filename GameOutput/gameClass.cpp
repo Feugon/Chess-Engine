@@ -151,7 +151,7 @@ void chessGame::selectedSetter(int mouseX, int mouseY) {
     // checks if we are moving the piece
     bool selectedMove = std::find(m_moveChoices.begin(), m_moveChoices.end(), m_selected) != m_moveChoices.end();
     if (selectedMove) {
-        movePiece(m_lastSelected,m_selected);
+        makeMove({m_lastSelected,m_selected});
     }
 
     m_moveChoices.clear();
@@ -159,9 +159,9 @@ void chessGame::selectedSetter(int mouseX, int mouseY) {
     // if we select the right colored piece then gets its possible moves
     if(m_board[m_selected]) {
         if((m_board[m_selected]->getIsWhite() && m_whiteToMove)) {
-            m_moveChoices = m_whiteMoves[m_selected];
+            m_moveChoices = m_board[m_selected]->getMoves();
         } else if ( (!m_board[m_selected]->getIsWhite() && !m_whiteToMove)) {
-            m_moveChoices = m_blackMoves[m_selected];
+            m_moveChoices = m_board[m_selected]->getMoves();
         }
     }
 
@@ -192,16 +192,15 @@ void chessGame::identifyMoves() {
         if(piece != nullptr){
             if(piece->getType() != "Padding" && piece->getIsWhite() && m_whiteToMove) {
                 piece->generateMoves(m_board);
-                // can add check to see if piece can move if not then don't add it to the moves map
-                if((piece->getMoves()).size() != 0) {
-                    m_whiteMoves[piece->getPosition()] = piece->getMoves();
+                for (auto move : piece->getMoves()) {
                     hasMoves = true;
+                    m_whiteMoves.push_back({piece->getPosition(),move});
                 }
             } else if (piece->getType() != "Padding" && !piece->getIsWhite() && !m_whiteToMove) {
                 piece->generateMoves(m_board);
-                if((piece->getMoves()).size() != 0) {
-                    m_blackMoves[piece->getPosition()] = piece->getMoves();
+                for (auto move : piece->getMoves()) {
                     hasMoves = true;
+                    m_blackMoves.push_back({piece->getPosition(),move});
                 }
             }
         }
@@ -218,8 +217,8 @@ void chessGame::identifyMoves() {
 
 }
 
-std::unordered_map<int,std::vector<int>> chessGame::getMoves(bool whiteMoves) {
-    if(whiteMoves) {
+std::vector<Move> chessGame::getMoves() {
+    if(m_whiteToMove) {
         return m_whiteMoves;
     } else {
         return m_blackMoves;
@@ -228,54 +227,55 @@ std::unordered_map<int,std::vector<int>> chessGame::getMoves(bool whiteMoves) {
 
 
 
-void chessGame::movePiece(int fromIndex, int toIndex) {
+void chessGame::makeMove(Move move) {
 
     // check for castling logic
-    if(m_board[fromIndex]->getType() == "King") {
-        if( toIndex - fromIndex == 2) {
+    if(m_board[move.from]->getType() == "King") {
+        if( move.to - move.from == 2) {
             castle(true);
-        } else if ( toIndex - fromIndex == -2) {
+        } else if ( move.to - move.from == -2) {
             castle(false);
         }
 
-        if(m_board[fromIndex]->getIsWhite()) {
-            m_whiteKingPosition = toIndex;
+        if(m_board[move.from]->getIsWhite()) {
+            m_whiteKingPosition = move.to;
         } else {
-            m_blackKingPosition = toIndex;
+            m_blackKingPosition = move.to;
         }
-        m_board[fromIndex]->move(toIndex);
-        m_board[toIndex] = std::move(m_board[fromIndex]);
-        m_board[fromIndex] = nullptr;
+        m_board[move.from]->move(move.to);
+        m_board[move.to] = std::move(m_board[move.from]);
+        m_board[move.from] = nullptr;
+
     // handles promotion (defaults to queen, should add other pieces at some point)
-    } else if(m_board[fromIndex]->getType() == "Pawn" && (toIndex / 10 == 2 || toIndex / 10 == 9)) {
-        if(toIndex / 10 == 2 && m_board[fromIndex]->getIsWhite()) {
-            auto queenPointer = std::make_unique<Queen>(toIndex,true,"Queen");
-            m_board[toIndex] = std::move(queenPointer);
-            m_board[fromIndex] = nullptr;
-        } else if (toIndex / 10 == 9 && !(m_board[fromIndex]->getIsWhite())) {
-            auto queenPointer = std::make_unique<Queen>(toIndex,false,"Queen");
-            m_board[toIndex] = std::move(queenPointer);
-            m_board[fromIndex] = nullptr;
+    } else if(m_board[move.from]->getType() == "Pawn" && (move.to / 10 == 2 || move.to / 10 == 9)) {
+        if(move.to / 10 == 2 && m_board[move.from]->getIsWhite()) {
+            auto queenPointer = std::make_unique<Queen>(move.to,true,"Queen");
+            m_board[move.to] = std::move(queenPointer);
+            m_board[move.from] = nullptr;
+        } else if (move.to / 10 == 9 && !(m_board[move.from]->getIsWhite())) {
+            auto queenPointer = std::make_unique<Queen>(move.to,false,"Queen");
+            m_board[move.to] = std::move(queenPointer);
+            m_board[move.from] = nullptr;
         }
     // handles en Passant (this should be cleaned up)
-    } else if(m_board[fromIndex]->getType() == "Pawn" && toIndex % 10 != fromIndex % 10 && m_board[toIndex] == nullptr) {
-        if(fromIndex - toIndex == 9) {
-            m_board[fromIndex + 1] = nullptr;
-        } else if (fromIndex - toIndex == 11) {
-            m_board[fromIndex - 1] = nullptr;
-        } else if(fromIndex - toIndex == -9) {
-            m_board[fromIndex - 1] = nullptr;
-        } else if (fromIndex - toIndex == -11) {
-            m_board[fromIndex + 1] = nullptr;
+    } else if(m_board[move.from]->getType() == "Pawn" && move.to % 10 != move.from % 10 && m_board[move.to] == nullptr) {
+        if(move.from - move.to == 9) {
+            m_board[move.from + 1] = nullptr;
+        } else if (move.from - move.to == 11) {
+            m_board[move.from - 1] = nullptr;
+        } else if(move.from - move.to == -9) {
+            m_board[move.from - 1] = nullptr;
+        } else if (move.from - move.to == -11) {
+            m_board[move.from + 1] = nullptr;
         }
-        m_board[fromIndex]->move(toIndex);
-        m_board[toIndex] = std::move(m_board[fromIndex]);
-        m_board[fromIndex] = nullptr;
+        m_board[move.from]->move(move.to);
+        m_board[move.to] = std::move(m_board[move.from]);
+        m_board[move.from] = nullptr;
 
     } else {
-        m_board[fromIndex]->move(toIndex);
-        m_board[toIndex] = std::move(m_board[fromIndex]);
-        m_board[fromIndex] = nullptr;
+        m_board[move.from]->move(move.to);
+        m_board[move.to] = std::move(m_board[move.from]);
+        m_board[move.from] = nullptr;
     }
 
 
@@ -286,7 +286,69 @@ void chessGame::movePiece(int fromIndex, int toIndex) {
 
 
     identifyMoves();
+}
 
+
+
+void chessGame::unmakeMove(Move move) {
+
+    // check for castling logic
+    if(m_board[move.from]->getType() == "King") {
+        if( move.to - move.from == 2) {
+            castle(true);
+        } else if ( move.to - move.from == -2) {
+            castle(false);
+        }
+
+        if(m_board[move.from]->getIsWhite()) {
+            m_whiteKingPosition = move.to;
+        } else {
+            m_blackKingPosition = move.to;
+        }
+        m_board[move.from]->move(move.to);
+        m_board[move.to] = std::move(m_board[move.from]);
+        m_board[move.from] = nullptr;
+
+    // handles promotion (defaults to queen, should add other pieces at some point)
+    } else if(m_board[move.from]->getType() == "Pawn" && (move.to / 10 == 2 || move.to / 10 == 9)) {
+        if(move.to / 10 == 2 && m_board[move.from]->getIsWhite()) {
+            auto queenPointer = std::make_unique<Queen>(move.to,true,"Queen");
+            m_board[move.to] = std::move(queenPointer);
+            m_board[move.from] = nullptr;
+        } else if (move.to / 10 == 9 && !(m_board[move.from]->getIsWhite())) {
+            auto queenPointer = std::make_unique<Queen>(move.to,false,"Queen");
+            m_board[move.to] = std::move(queenPointer);
+            m_board[move.from] = nullptr;
+        }
+    // handles en Passant (this should be cleaned up)
+    } else if(m_board[move.from]->getType() == "Pawn" && move.to % 10 != move.from % 10 && m_board[move.to] == nullptr) {
+        if(move.from - move.to == 9) {
+            m_board[move.from + 1] = nullptr;
+        } else if (move.from - move.to == 11) {
+            m_board[move.from - 1] = nullptr;
+        } else if(move.from - move.to == -9) {
+            m_board[move.from - 1] = nullptr;
+        } else if (move.from - move.to == -11) {
+            m_board[move.from + 1] = nullptr;
+        }
+        m_board[move.from]->move(move.to);
+        m_board[move.to] = std::move(m_board[move.from]);
+        m_board[move.from] = nullptr;
+
+    } else {
+        m_board[move.from]->move(move.to);
+        m_board[move.to] = std::move(m_board[move.from]);
+        m_board[move.from] = nullptr;
+    }
+
+
+
+
+    m_whiteToMove = !m_whiteToMove;
+    m_selected = 0;
+
+
+    identifyMoves();
 }
 
 
