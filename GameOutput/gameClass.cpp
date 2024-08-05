@@ -207,9 +207,6 @@ void chessGame::identifyMoves() {
         }
     }
 
-    if(m_board[m_blackKingPosition]->inCheck(m_board)){
-        std::cout << "black in check! ";
-    }
 
     //checkmate detection
     if(!hasMoves && m_whiteToMove && m_board[m_whiteKingPosition]->inCheck(m_board)) {
@@ -221,6 +218,13 @@ void chessGame::identifyMoves() {
 
 }
 
+std::unordered_map<int,std::vector<int>> chessGame::getMoves(bool whiteMoves) {
+    if(whiteMoves) {
+        return m_whiteMoves;
+    } else {
+        return m_blackMoves;
+    }
+}
 
 
 

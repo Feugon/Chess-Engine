@@ -30,6 +30,8 @@ if (SFML_FOUND)
             pieces/king.cpp
             pieces/king.h
             pieces/padding.h
+            Engine/moveSearch.cpp
+            Engine/moveSearch.h
     )
 
     # Specify include directories

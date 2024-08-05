@@ -14,6 +14,7 @@ public:
     void drawPosition(sf::RenderWindow &window);
     void drawPossibleMoves(sf::RenderWindow &window);
     void selectedSetter(int mouseX, int mouseY);
+    std::unordered_map<int,std::vector<int>> getMoves(bool whiteMoves);
 private:
     int m_selected;
     int m_lastSelected;
