@@ -20,7 +20,7 @@ public:
     void selectedSetter(int mouseX, int mouseY);
     void makeMove(Move move);
     void unmakeMove(Move move);
-    std::vector<Move> getMoves();
+    std::vector<Move> getMoves(int depth = 1);
 private:
     bool m_checkmate = false;
     int m_selected;

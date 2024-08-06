@@ -187,21 +187,21 @@ void chessGame::identifyMoves() {
 
     m_whiteMoves.clear();
     m_blackMoves.clear();
-    bool hasMoves = false;
+    bool hasMoves = false; // somehow its faster to use this over .empty()
 
-    for (auto& piece : m_board) {
-        if(piece != nullptr){
-            if(piece->getType() != padding && piece->getIsWhite() && m_whiteToMove) {
-                piece->generateMoves(m_board);
-                for (auto move : piece->getMoves()) {
+    for (int i = 21; i <= 98; i ++) {
+        if(m_board[i] != nullptr){
+            if(m_board[i]->getIsWhite() && m_whiteToMove) {
+                m_board[i]->generateMoves(m_board);
+                for (auto move : m_board[i]->getMoves()) {
                     hasMoves = true;
-                    m_whiteMoves.push_back({piece->getPosition(),move});
+                    m_whiteMoves.push_back({m_board[i]->getPosition(),move});
                 }
-            } else if (piece->getType() != padding && !piece->getIsWhite() && !m_whiteToMove) {
-                piece->generateMoves(m_board);
-                for (auto move : piece->getMoves()) {
+            } else if (!m_board[i]->getIsWhite() && !m_whiteToMove) {
+                m_board[i]->generateMoves(m_board);
+                for (auto move : m_board[i]->getMoves()) {
                     hasMoves = true;
-                    m_blackMoves.push_back({piece->getPosition(),move});
+                    m_blackMoves.push_back({m_board[i]->getPosition(),move});
                 }
             }
         }
@@ -218,13 +218,15 @@ void chessGame::identifyMoves() {
 
 }
 
-std::vector<Move> chessGame::getMoves() {
+std::vector<Move> chessGame::getMoves(int depth) {
 
-    if(m_checkmate) {
+    if(m_checkmate || depth == 0) {
         return {};
     }else if(m_whiteToMove) {
+        identifyMoves();
         return m_whiteMoves;
     } else {
+        identifyMoves();
         return m_blackMoves;
     }
 }
@@ -294,7 +296,6 @@ void chessGame::makeMove(Move move) {
 
     m_whiteToMove = !m_whiteToMove;
 
-    identifyMoves();
 }
 
 

@@ -16,7 +16,7 @@ int perft(chessGame &game, int depth) {
         return 1;
     }
 
-    std::vector<Move> possibleMoves = game.getMoves();
+    std::vector<Move> possibleMoves = game.getMoves(depth);
 
     for(auto& move: possibleMoves) {
         game.makeMove(move);

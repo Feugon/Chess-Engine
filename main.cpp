@@ -18,8 +18,9 @@ int main() {
 
 
     auto start = std::chrono::high_resolution_clock::now();
-    std::cout << perft(game, 3) << std::endl;
-    // 4)18.89, 3)0.717 || after enums 4)15.9, 3)0.62
+    //std::cout << perft(game, 5) << std::endl;
+    // 4)18.89, 3)0.717 || after enums 4)15.9, 3)0.62 || after not looping through padding space 4)15.7, 3)0.61
+    // after not calculating possible moves on the last move 4)0.6
 
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = end - start;
