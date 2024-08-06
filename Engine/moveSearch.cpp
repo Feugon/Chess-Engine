@@ -19,9 +19,9 @@ int perft(chessGame &game, int depth) {
     std::vector<Move> possibleMoves = game.getMoves();
 
     for(auto& move: possibleMoves) {
-        //make move
+        game.makeMove(move);
         nodes += perft(game, depth - 1);
-        //unod move
+        game.unmakeMove(move);
     }
 
     return nodes;

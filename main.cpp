@@ -1,4 +1,5 @@
 #include "GameOutput/gameClass.h"
+#include "Engine/moveSearch.h"
 #include <SFML/Graphics.hpp>
 #include <thread>
 #include <chrono>
@@ -13,7 +14,15 @@ int main() {
     window.setFramerateLimit(60);
 
     //starting position: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
-    chessGame game("r4rk1/pP1nqpp1/2pp1n1p/2b1p1B1/2B1P1b1/3P1N2/1PPNQPPP/R3K2R");
+    chessGame game("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+
+
+    auto start = std::chrono::high_resolution_clock::now();
+    std::cout << perft(game, 4) << std::endl;
+
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration = end - start;
+    std::cout << "Time taken by function: " << duration.count() << " seconds" << std::endl;
 
     // initial draw
     window.clear();

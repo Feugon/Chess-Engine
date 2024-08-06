@@ -116,7 +116,6 @@ void chessGame::drawPosition(sf::RenderWindow& window) {
 
 
 void chessGame::drawPossibleMoves(sf::RenderWindow &window) {
-
     int selectedX = m_selected % 10 - 1;
     int selectedY = (m_selected - 20) / 10;
 
@@ -240,7 +239,7 @@ std::vector<Move> chessGame::getMoves() {
 
 void chessGame::makeMove(Move move) {
 
-    m_lastOccupied = std::move(m_board[move.to]);
+    m_lastOccupied.push(std::move(m_board[move.to]));
     m_lastMoveWasPromotion = false;
 
     // check for castling logic
@@ -273,7 +272,7 @@ void chessGame::makeMove(Move move) {
             m_board[move.from] = nullptr;
         }
     // handles en Passant (this should be cleaned up)
-    } else if(m_board[move.from]->getType() == "Pawn" && move.to % 10 != move.from % 10 && m_board[move.to] == nullptr) {
+    } else if(m_board[move.from]->getType() == "Pawn" && move.to % 10 != move.from % 10 && m_lastOccupied.top() == nullptr) {
         if(move.from - move.to == 9) {
             m_enPassantedPawn = std::move(m_board[move.from + 1]);
             m_board[move.from + 1] = nullptr;
@@ -295,13 +294,11 @@ void chessGame::makeMove(Move move) {
         m_board[move.from]->move(move.to);
         m_board[move.to] = std::move(m_board[move.from]);
         m_board[move.from] = nullptr;
+
     }
 
 
-
     m_whiteToMove = !m_whiteToMove;
-
-
 
     identifyMoves();
 }
@@ -331,6 +328,7 @@ void chessGame::unmakeMove(Move move) {
         m_board[move.to]->move(move.from);
         m_board[move.from] = std::move(m_board[move.to]);
         m_board[move.to] = nullptr;
+        m_lastOccupied.pop();
 
         // undoes promotion
         // note to self: the pawn can't move after getting created, but I don't think that should be an issue
@@ -338,14 +336,16 @@ void chessGame::unmakeMove(Move move) {
         if(move.to / 10 == 2 && m_board[move.to]->getIsWhite()) {
             auto pawnPointer = std::make_unique<Pawn>(move.from,true,"Pawn");
             m_board[move.from] = std::move(pawnPointer);
-            m_board[move.to] = std::move(m_lastOccupied);
+            m_board[move.to] = std::move(m_lastOccupied.top());
+            m_lastOccupied.pop();
         } else if (move.to / 10 == 9 && !(m_board[move.from]->getIsWhite())) {
             auto pawnPointer = std::make_unique<Pawn>(move.from,false,"Pawn");
             m_board[move.from] = std::move(pawnPointer);
-            m_board[move.to] = std::move(m_lastOccupied);
+            m_board[move.to] = std::move(m_lastOccupied.top());
+            m_lastOccupied.pop();
         }
     // undo en Passant
-    } else if(m_board[move.to]->getType() == "Pawn" && move.to % 10 != move.from % 10 && m_lastOccupied == nullptr) {
+    } else if(m_board[move.to]->getType() == "Pawn" && move.to % 10 != move.from % 10 && m_lastOccupied.top() == nullptr) {
         if(move.from - move.to == 9) {
             m_board[move.from + 1] = std::move(m_enPassantedPawn);
         } else if (move.from - move.to == 11) {
@@ -357,14 +357,14 @@ void chessGame::unmakeMove(Move move) {
         }
         m_board[move.to]->move(move.from);
         m_board[move.from] = std::move(m_board[move.to]);
-        m_board[move.to] = std::move(m_lastOccupied);
+        m_board[move.to] = std::move(m_lastOccupied.top());
+        m_lastOccupied.pop();
 
     } else {
-        std::cout << move.to;
         m_board[move.to]->move(move.from);
         m_board[move.from] = std::move(m_board[move.to]);
-        m_board[move.to] = std::move(m_lastOccupied);
-        std::cout << m_board[move.from]->getType();
+        m_board[move.to] = std::move(m_lastOccupied.top());
+        m_lastOccupied.pop();
     }
 
 

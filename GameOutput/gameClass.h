@@ -3,6 +3,7 @@
 #include <vector>
 #include <unordered_map>
 #include <memory>
+#include <stack>
 #include "../pieces/basePiece.h"
 
 struct Move {
@@ -17,6 +18,8 @@ public:
     void drawPosition(sf::RenderWindow &window);
     void drawPossibleMoves(sf::RenderWindow &window);
     void selectedSetter(int mouseX, int mouseY);
+    void makeMove(Move move);
+    void unmakeMove(Move move);
     std::vector<Move> getMoves();
 private:
     int m_selected;
@@ -29,13 +32,12 @@ private:
     std::vector<Move> m_whiteMoves;
     std::vector<Move>  m_blackMoves;
     std::vector<std::unique_ptr<basePiece>> m_board;
-    std::unique_ptr<basePiece> m_lastOccupied;
+    std::stack<std::unique_ptr<basePiece>> m_lastOccupied;
     std::unique_ptr<basePiece> m_enPassantedPawn;
 
 
+
     void identifyMoves();
-    void makeMove(Move move);
-    void unmakeMove(Move move);
     void castle(bool kingsideCastle);
 };
 

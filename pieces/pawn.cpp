@@ -62,7 +62,7 @@ void Pawn::generateMoves(std::vector<std::unique_ptr<basePiece>> &board) {
 
 
 void Pawn::move(int index) {
-    if(m_position - index == 20 || m_position - index == -20) {
+    if((m_position - index == 20 && m_isWhite) || (m_position - index == -20 && !m_isWhite)) {
         basePiece::m_enPassantPosition = index;
     } else {
         basePiece::m_enPassantPosition = 0;
