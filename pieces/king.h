@@ -9,7 +9,7 @@
 
 class King : public basePiece {
 public:
-    King(int postion, bool is_white, std::string type): basePiece(postion, is_white, type) {
+    King(int postion, bool is_white, PieceType type): basePiece(postion, is_white, type) {
         m_imageDir = is_white ? "../images/w_king.png" : "../images/b_king.png";
         basePiece::m_whiteKingPosition = is_white ? m_position : m_whiteKingPosition;
         basePiece::m_blackKingPosition = is_white ? m_blackKingPosition : m_position;

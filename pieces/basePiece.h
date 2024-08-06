@@ -5,11 +5,15 @@
 #include <iostream>
 
 
+enum PieceType {
+    king, queen, rook, bishop, knight, pawn, padding, piece
+};
+
 class basePiece {
 
 public:
 
-    basePiece(int position, bool is_white, std::string type);
+    basePiece(int position, bool is_white, PieceType type);
     virtual ~basePiece() = default;
 
 
@@ -24,7 +28,7 @@ public:
 
     int getPosition(){return m_position;}
     std::vector<int> getMoves(){return m_possibleMoves;}
-    virtual std::string getType(){return m_type;}
+    virtual PieceType getType(){return m_type;}
     virtual bool getIsWhite(){return m_isWhite;}
 
     static int m_whiteKingPosition;
@@ -32,7 +36,7 @@ public:
     static int m_enPassantPosition;
 
 protected:
-    std::string m_type = "BasePiece";
+    PieceType m_type = piece;
     bool m_isWhite;
     int m_position;
     std::string m_imageDir;

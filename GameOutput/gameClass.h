@@ -22,6 +22,7 @@ public:
     void unmakeMove(Move move);
     std::vector<Move> getMoves();
 private:
+    bool m_checkmate = false;
     int m_selected;
     int m_lastSelected;
     int m_whiteKingPosition;

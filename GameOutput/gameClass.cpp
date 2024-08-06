@@ -27,7 +27,7 @@ chessGame::chessGame(const std::string &FEN) {
 
     for (int i=0; i<120; i++) {
         if(i < 21 || i > 98 || i % 10 == 0 || i % 10 == 9) {
-            auto paddingPointer = std::make_unique<Padding>(i, false, "Padding");
+            auto paddingPointer = std::make_unique<Padding>(i, false, padding);
             m_board.push_back(std::move(paddingPointer));
 
         } else if (std::isdigit(FEN[stringIndex])) {
@@ -51,27 +51,27 @@ chessGame::chessGame(const std::string &FEN) {
 
             if (FEN[stringIndex] == 'p' || FEN[stringIndex] == 'P') {
                 // Handle Pawn
-                auto pawnPointer = std::make_unique<Pawn>(i, is_white, "Pawn");
+                auto pawnPointer = std::make_unique<Pawn>(i, is_white, pawn);
                 m_board.push_back(std::move(pawnPointer));
             } else if (FEN[stringIndex] == 'n' || FEN[stringIndex] == 'N') {
                 // Handle Knight
-                auto knightPointer = std::make_unique<Knight>(i, is_white, "Knight");
+                auto knightPointer = std::make_unique<Knight>(i, is_white, knight);
                 m_board.push_back(std::move(knightPointer));
             } else if (FEN[stringIndex] == 'b' || FEN[stringIndex] == 'B') {
                 // Handle Bishop
-                auto bishopPointer = std::make_unique<Bishop>(i, is_white, "Bishop");
+                auto bishopPointer = std::make_unique<Bishop>(i, is_white, bishop);
                 m_board.push_back(std::move(bishopPointer));
             } else if (FEN[stringIndex] == 'r' || FEN[stringIndex] == 'R') {
                 // Handle Rook
-                auto rookPointer = std::make_unique<Rook>(i, is_white, "Rook");
+                auto rookPointer = std::make_unique<Rook>(i, is_white, rook);
                 m_board.push_back(std::move(rookPointer));
             } else if (FEN[stringIndex] == 'q' || FEN[stringIndex] == 'Q') {
                 // Handle Queen
-                auto queenPointer = std::make_unique<Queen>(i, is_white,"Queen");
+                auto queenPointer = std::make_unique<Queen>(i, is_white,queen);
                 m_board.push_back(std::move(queenPointer));
             } else if (FEN[stringIndex] == 'k' || FEN[stringIndex] == 'K') {
                 // Handle King
-                auto kingPointer = std::make_unique<King>(i, is_white, "King");
+                auto kingPointer = std::make_unique<King>(i, is_white, king);
                 m_board.push_back(std::move(kingPointer));
 
                 if(is_white) {
@@ -106,7 +106,7 @@ void chessGame::drawPosition(sf::RenderWindow& window) {
 
     // loops through all pointers and draws every piece
     for(auto& pointer : m_board) {
-        if(pointer && pointer->getType() != "Padding") {
+        if(pointer && pointer->getType() != padding) {
             pointer->draw(window);
         }
     }
@@ -148,19 +148,10 @@ void chessGame::selectedSetter(int mouseX, int mouseY) {
 
 
     // checks if we are moving the piece
+
     bool selectedMove = std::find(m_moveChoices.begin(), m_moveChoices.end(), m_selected) != m_moveChoices.end();
     if (selectedMove) {
         makeMove({m_lastSelected,m_selected});
-
-           //for testing
-        std::string input;
-        std::cout << " (y/n): ";
-        std::cin >> input;
-
-        if(input == "y") {
-            unmakeMove({m_lastSelected,m_selected});
-        }
-
         m_selected = 0;
     }
 
@@ -200,13 +191,13 @@ void chessGame::identifyMoves() {
 
     for (auto& piece : m_board) {
         if(piece != nullptr){
-            if(piece->getType() != "Padding" && piece->getIsWhite() && m_whiteToMove) {
+            if(piece->getType() != padding && piece->getIsWhite() && m_whiteToMove) {
                 piece->generateMoves(m_board);
                 for (auto move : piece->getMoves()) {
                     hasMoves = true;
                     m_whiteMoves.push_back({piece->getPosition(),move});
                 }
-            } else if (piece->getType() != "Padding" && !piece->getIsWhite() && !m_whiteToMove) {
+            } else if (piece->getType() != padding && !piece->getIsWhite() && !m_whiteToMove) {
                 piece->generateMoves(m_board);
                 for (auto move : piece->getMoves()) {
                     hasMoves = true;
@@ -219,16 +210,19 @@ void chessGame::identifyMoves() {
 
     //checkmate detection
     if(!hasMoves && m_whiteToMove && m_board[m_whiteKingPosition]->inCheck(m_board)) {
-        std::cout << "Black Wins!";
+        m_checkmate = true;
     } else if (!hasMoves && !m_whiteToMove && m_board[m_blackKingPosition]->inCheck(m_board)) {
-        std::cout << "White Wins!";
+        m_checkmate = true;
     }
 
 
 }
 
 std::vector<Move> chessGame::getMoves() {
-    if(m_whiteToMove) {
+
+    if(m_checkmate) {
+        return {};
+    }else if(m_whiteToMove) {
         return m_whiteMoves;
     } else {
         return m_blackMoves;
@@ -243,7 +237,7 @@ void chessGame::makeMove(Move move) {
     m_lastMoveWasPromotion = false;
 
     // check for castling logic
-    if(m_board[move.from]->getType() == "King") {
+    if(m_board[move.from]->getType() == king) {
         if( move.to - move.from == 2) {
             castle(true);
         } else if ( move.to - move.from == -2) {
@@ -260,19 +254,19 @@ void chessGame::makeMove(Move move) {
         m_board[move.from] = nullptr;
 
     // handles promotion (defaults to queen, should add other pieces at some point)
-    } else if(m_board[move.from]->getType() == "Pawn" && (move.to / 10 == 2 || move.to / 10 == 9)) {
+    } else if(m_board[move.from]->getType() == pawn && (move.to / 10 == 2 || move.to / 10 == 9)) {
         m_lastMoveWasPromotion = true;
         if(move.to / 10 == 2 && m_board[move.from]->getIsWhite()) {
-            auto queenPointer = std::make_unique<Queen>(move.to,true,"Queen");
+            auto queenPointer = std::make_unique<Queen>(move.to,true,queen);
             m_board[move.to] = std::move(queenPointer);
             m_board[move.from] = nullptr;
         } else if (move.to / 10 == 9 && !(m_board[move.from]->getIsWhite())) {
-            auto queenPointer = std::make_unique<Queen>(move.to,false,"Queen");
+            auto queenPointer = std::make_unique<Queen>(move.to,false,queen);
             m_board[move.to] = std::move(queenPointer);
             m_board[move.from] = nullptr;
         }
     // handles en Passant (this should be cleaned up)
-    } else if(m_board[move.from]->getType() == "Pawn" && move.to % 10 != move.from % 10 && m_lastOccupied.top() == nullptr) {
+    } else if(m_board[move.from]->getType() == pawn && move.to % 10 != move.from % 10 && m_lastOccupied.top() == nullptr) {
         if(move.from - move.to == 9) {
             m_enPassantedPawn = std::move(m_board[move.from + 1]);
             m_board[move.from + 1] = nullptr;
@@ -308,7 +302,7 @@ void chessGame::makeMove(Move move) {
 void chessGame::unmakeMove(Move move) {
 
     // check for castling logic
-    if(m_board[move.to]->getType() == "King") {
+    if(m_board[move.to]->getType() == king) {
         //moves the rook back
         if(move.to - move.from == 2) {
             m_board[move.from + 1]->move(move.from + 3);
@@ -334,18 +328,18 @@ void chessGame::unmakeMove(Move move) {
         // note to self: the pawn can't move after getting created, but I don't think that should be an issue
     } else if(m_lastMoveWasPromotion) {
         if(move.to / 10 == 2 && m_board[move.to]->getIsWhite()) {
-            auto pawnPointer = std::make_unique<Pawn>(move.from,true,"Pawn");
+            auto pawnPointer = std::make_unique<Pawn>(move.from,true,pawn);
             m_board[move.from] = std::move(pawnPointer);
             m_board[move.to] = std::move(m_lastOccupied.top());
             m_lastOccupied.pop();
         } else if (move.to / 10 == 9 && !(m_board[move.from]->getIsWhite())) {
-            auto pawnPointer = std::make_unique<Pawn>(move.from,false,"Pawn");
+            auto pawnPointer = std::make_unique<Pawn>(move.from,false,pawn);
             m_board[move.from] = std::move(pawnPointer);
             m_board[move.to] = std::move(m_lastOccupied.top());
             m_lastOccupied.pop();
         }
     // undo en Passant
-    } else if(m_board[move.to]->getType() == "Pawn" && move.to % 10 != move.from % 10 && m_lastOccupied.top() == nullptr) {
+    } else if(m_board[move.to]->getType() == pawn && move.to % 10 != move.from % 10 && m_lastOccupied.top() == nullptr) {
         if(move.from - move.to == 9) {
             m_board[move.from + 1] = std::move(m_enPassantedPawn);
         } else if (move.from - move.to == 11) {
@@ -368,7 +362,7 @@ void chessGame::unmakeMove(Move move) {
     }
 
 
-
+    m_checkmate = false;
     m_whiteToMove = !m_whiteToMove;
     m_selected = 0;
 

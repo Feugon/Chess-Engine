@@ -13,8 +13,8 @@ void King::canCastle(std::vector <std::unique_ptr<basePiece>> &board) {
     if(!m_hasMoved && !(this->inCheck(board))) {
         bool kingRookPresent = false;
         bool queenRookPresent = false;
-        if(!isSquareEmpty(board,m_position+3)){kingRookPresent = board[m_position + 3]->getType() == "Rook";}
-        if(!isSquareEmpty(board,m_position-4)){queenRookPresent = board[m_position - 4]->getType() == "Rook";}
+        if(!isSquareEmpty(board,m_position+3)){kingRookPresent = board[m_position + 3]->getType() == rook;}
+        if(!isSquareEmpty(board,m_position-4)){queenRookPresent = board[m_position - 4]->getType() == rook;}
 
         bool kingsRookMoved = true;
         bool queenRookMoved = true;
@@ -80,23 +80,23 @@ bool King::inCheck(std::vector<std::unique_ptr<basePiece>> &board) {
     if(m_isWhite) {
         //check if pawns are checking
         if(!isSquareEmpty(board, m_position - 9)) {
-            if(board[m_position - 9]->getType() == "Pawn" && !(board[m_position - 9]->getIsWhite())) {
+            if(board[m_position - 9]->getType() == pawn && !(board[m_position - 9]->getIsWhite())) {
                 return true;
             }
         }
         if(!isSquareEmpty(board, m_position - 11)) {
-            if(board[m_position - 11]->getType() == "Pawn" && !(board[m_position - 11]->getIsWhite())) {
+            if(board[m_position - 11]->getType() == pawn && !(board[m_position - 11]->getIsWhite())) {
                 return true;
             }
         }
     } else {
         if(!isSquareEmpty(board, m_position + 9)) {
-            if(board[m_position + 9]->getType() == "Pawn" && (board[m_position + 9]->getIsWhite())) {
+            if(board[m_position + 9]->getType() == pawn && (board[m_position + 9]->getIsWhite())) {
                 return true;
             }
         }
         if(!isSquareEmpty(board, m_position + 11)) {
-            if(board[m_position + 11]->getType() == "Pawn" && (board[m_position + 11]->getIsWhite())) {
+            if(board[m_position + 11]->getType() == pawn && (board[m_position + 11]->getIsWhite())) {
                 return true;
             }
         }
@@ -108,7 +108,7 @@ bool King::inCheck(std::vector<std::unique_ptr<basePiece>> &board) {
 
     for(auto move : upDownMoves) {
         if(!isSquareEmpty(board, move)) {
-            if((board[move]->getType() == "Rook" || board[move]->getType() == "Queen") && board[move]->getIsWhite() != m_isWhite) {
+            if((board[move]->getType() == rook || board[move]->getType() == queen) && board[move]->getIsWhite() != m_isWhite) {
                 return true;
             }
         }
@@ -118,7 +118,7 @@ bool King::inCheck(std::vector<std::unique_ptr<basePiece>> &board) {
     std::vector<int> diagonalMoves = slidingMoves(board,diagonalShifts);
     for(auto move : diagonalMoves) {
         if(!isSquareEmpty(board, move)) {
-            if((board[move]->getType() == "Bishop" || board[move]->getType() == "Queen") && board[move]->getIsWhite() != m_isWhite) {
+            if((board[move]->getType() == bishop || board[move]->getType() == queen) && board[move]->getIsWhite() != m_isWhite) {
                 return true;
             }
         }
@@ -128,7 +128,7 @@ bool King::inCheck(std::vector<std::unique_ptr<basePiece>> &board) {
 
     for(int shift : knightShifts) {
         if(!isSquareEmpty(board, m_position + shift)) {
-            if(board[m_position + shift]->getType() == "Knight" && board[m_position + shift]->getIsWhite() != m_isWhite) {
+            if(board[m_position + shift]->getType() == knight && board[m_position + shift]->getIsWhite() != m_isWhite) {
                 return true;
             }
         }
