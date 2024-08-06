@@ -24,10 +24,14 @@ private:
     int m_whiteKingPosition;
     int m_blackKingPosition;
     bool m_whiteToMove;
+    bool m_lastMoveWasPromotion;
     std::vector<int> m_moveChoices;
     std::vector<Move> m_whiteMoves;
     std::vector<Move>  m_blackMoves;
     std::vector<std::unique_ptr<basePiece>> m_board;
+    std::unique_ptr<basePiece> m_lastOccupied;
+    std::unique_ptr<basePiece> m_enPassantedPawn;
+
 
     void identifyMoves();
     void makeMove(Move move);
