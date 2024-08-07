@@ -10,7 +10,7 @@ void King::canCastle(std::vector <std::unique_ptr<basePiece>> &board) {
     m_canKingsideCastle = false;
     m_canQueensideCastle = false;
 
-    if(!m_hasMoved && !(this->inCheck(board))) {
+    if(!m_timesMoved && !(this->inCheck(board))) {
         bool kingRookPresent = false;
         bool queenRookPresent = false;
         if(!isSquareEmpty(board,m_position+3)){kingRookPresent = board[m_position + 3]->getType() == rook;}
@@ -20,12 +20,12 @@ void King::canCastle(std::vector <std::unique_ptr<basePiece>> &board) {
         bool queenRookMoved = true;
 
         if(kingRookPresent) {
-            Rook* kingRook = dynamic_cast<Rook*>(board[m_position + 3].get());
-            kingsRookMoved = kingRook->m_hasMoved;
+            Rook* kingRook = static_cast<Rook*>(board[m_position + 3].get());
+            kingsRookMoved = kingRook->m_timesMoved;
         }
         if(queenRookPresent) {
-            Rook* queenRook = dynamic_cast<Rook*>(board[m_position - 4].get());
-            queenRookMoved = queenRook->m_hasMoved;
+            Rook* queenRook = static_cast<Rook*>(board[m_position - 4].get());
+            queenRookMoved = queenRook->m_timesMoved;
         }
 
         bool kingsideEmpty = isSquareEmpty(board,m_position + 1) && isSquareEmpty(board,m_position + 2);
@@ -147,7 +147,7 @@ bool King::inCheck(std::vector<std::unique_ptr<basePiece>> &board) {
 
 void King::move(int index) {
     m_position = index;
-    m_hasMoved = true;
+    m_timesMoved++;
     m_canKingsideCastle = false;
     m_canQueensideCastle = false;
 

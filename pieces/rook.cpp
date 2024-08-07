@@ -14,5 +14,5 @@ void Rook::generateMoves(std::vector<std::unique_ptr<basePiece>> &board) {
 
 void Rook::move(int index) {
     m_position = index;
-    m_hasMoved = true;
+    m_timesMoved++;
 }

@@ -19,9 +19,9 @@ public:
     void setIndex(int index) override {m_position = index;}
     void canCastle(std::vector<std::unique_ptr<basePiece>> &board);
     bool inCheck( std::vector<std::unique_ptr<basePiece>> &board) override;
+    int m_timesMoved = 0; // this probably should be in private and should make some setter method...
 
 private:
-    bool m_hasMoved = false;
     bool m_canKingsideCastle = false;
     bool m_canQueensideCastle = false;
 };

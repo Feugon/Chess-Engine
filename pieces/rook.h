@@ -12,7 +12,7 @@ public:
     void generateMoves(std::vector<std::unique_ptr<basePiece>> &board) override;
     void move(int index) override;
 
+    int m_timesMoved = 0;
+
     friend class King;
-private:
-    bool m_hasMoved = false;
 };

@@ -148,7 +148,6 @@ void chessGame::selectedSetter(int mouseX, int mouseY) {
 
 
     // checks if we are moving the piece
-
     bool selectedMove = std::find(m_moveChoices.begin(), m_moveChoices.end(), m_selected) != m_moveChoices.end();
     if (selectedMove) {
         makeMove({m_lastSelected,m_selected});
@@ -184,7 +183,6 @@ void chessGame::castle(bool kingsideCastle) {
 
 
 void chessGame::identifyMoves() {
-
     m_whiteMoves.clear();
     m_blackMoves.clear();
     bool hasMoves = false; // somehow its faster to use this over .empty()
@@ -218,22 +216,19 @@ void chessGame::identifyMoves() {
 
 }
 
-std::vector<Move> chessGame::getMoves(int depth) {
+std::vector<Move> chessGame::getMoves() {
 
-    if(m_checkmate || depth == 0) {
-        return {};
-    }else if(m_whiteToMove) {
-        identifyMoves();
-        return m_whiteMoves;
+
+     if(m_whiteToMove) {
+         return m_whiteMoves;
     } else {
-        identifyMoves();
         return m_blackMoves;
     }
 }
 
 
 
-void chessGame::makeMove(Move move) {
+void chessGame::makeMove(Move move, int depth) {
 
     m_lastOccupied.push(std::move(m_board[move.to]));
     m_lastMoveWasPromotion = false;
@@ -293,8 +288,13 @@ void chessGame::makeMove(Move move) {
 
     }
 
-
     m_whiteToMove = !m_whiteToMove;
+
+    if(depth != 0) {
+    identifyMoves();
+    }
+
+
 
 }
 
@@ -320,6 +320,8 @@ void chessGame::unmakeMove(Move move) {
         } else {
             m_blackKingPosition = move.from;
         }
+        King* derived = static_cast<King*>(m_board[move.to].get());
+        derived->m_timesMoved -= 2;
         m_board[move.to]->move(move.from);
         m_board[move.from] = std::move(m_board[move.to]);
         m_board[move.to] = nullptr;
@@ -356,6 +358,11 @@ void chessGame::unmakeMove(Move move) {
         m_lastOccupied.pop();
 
     } else {
+        if(m_board[move.to]->getType() == rook) {
+            Rook* derived = static_cast<Rook*>(m_board[move.to].get());
+            derived->m_timesMoved -= 2;
+        }
+
         m_board[move.to]->move(move.from);
         m_board[move.from] = std::move(m_board[move.to]);
         m_board[move.to] = std::move(m_lastOccupied.top());

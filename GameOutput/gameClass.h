@@ -18,9 +18,10 @@ public:
     void drawPosition(sf::RenderWindow &window);
     void drawPossibleMoves(sf::RenderWindow &window);
     void selectedSetter(int mouseX, int mouseY);
-    void makeMove(Move move);
+    void makeMove(Move move, int depth = 1);
     void unmakeMove(Move move);
-    std::vector<Move> getMoves(int depth = 1);
+    std::vector<Move> getMoves();
+    void identifyMoves();
 private:
     bool m_checkmate = false;
     int m_selected;
@@ -37,8 +38,6 @@ private:
     std::unique_ptr<basePiece> m_enPassantedPawn;
 
 
-
-    void identifyMoves();
     void castle(bool kingsideCastle);
 };
 
