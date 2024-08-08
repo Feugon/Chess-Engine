@@ -153,7 +153,9 @@ void King::move(int index) {
 
     if(m_isWhite) {
         basePiece::m_whiteKingPosition = index;
+        basePiece::m_enPassantPosition = 0;
     } else {
         basePiece::m_blackKingPosition = index;
+        basePiece::m_enPassantPosition = 0;
     }
 }

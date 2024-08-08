@@ -14,11 +14,11 @@ int main() {
     window.setFramerateLimit(60);
 
     //starting position: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
-    chessGame game("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+    chessGame game("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R");
 
 
     auto start = std::chrono::high_resolution_clock::now();
-    std::cout << perft(game, 4) << std::endl;
+    std::cout << perft(game, 3) << std::endl;
     // 4)18.89, 3)0.717 || after enums 4)15.9, 3)0.62 || after not looping through padding space 4)15.7, 3)0.61
     // after not calculating possible moves on the last move 4)0.6
 
@@ -45,6 +45,18 @@ int main() {
             if (event.type == sf::Event::MouseButtonPressed) {
                 game.selectedSetter(event.mouseButton.x, event.mouseButton.y);
                 shouldUpdate = true; // Set flag to true when a relevant event occurs
+            }
+            if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Q) {
+                    int from;
+                    int to;
+                    std::cout << "from: ";
+                    std::cin >>  from;
+                    std::cout << "to: ";
+                    std::cin >> to;
+                    game.unmakeMove({from,to});
+                    // Add your custom logic for the 'Q' key press here
+                }
             }
         }
 

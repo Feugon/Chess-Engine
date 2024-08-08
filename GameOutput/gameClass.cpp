@@ -170,14 +170,15 @@ void chessGame::selectedSetter(int mouseX, int mouseY) {
 
 
 void chessGame::castle(bool kingsideCastle) {
+    int kingPosition = m_whiteToMove ? m_whiteKingPosition : m_blackKingPosition;
     if(kingsideCastle) {
-        m_board[m_lastSelected + 3]->move(m_lastSelected + 1);
-        m_board[m_lastSelected + 1] = std::move(m_board[m_lastSelected + 3]);
-        m_board[m_lastSelected + 3] = nullptr;
+        m_board[kingPosition + 3]->move(kingPosition + 1);
+        m_board[kingPosition + 1] = std::move(m_board[kingPosition + 3]);
+        m_board[kingPosition + 3] = nullptr;
     } else {
-        m_board[m_lastSelected - 4]->move(m_lastSelected - 1);
-        m_board[m_lastSelected - 1] = std::move(m_board[m_lastSelected - 4]);
-        m_board[m_lastSelected - 4] = nullptr;
+        m_board[kingPosition - 4]->move(kingPosition - 1);
+        m_board[kingPosition- 1] = std::move(m_board[kingPosition - 4]);
+        m_board[kingPosition - 4] = nullptr;
     }
 }
 
@@ -187,19 +188,21 @@ void chessGame::identifyMoves() {
     m_blackMoves.clear();
     bool hasMoves = false; // somehow its faster to use this over .empty()
 
-    for (int i = 21; i <= 98; i ++) {
-        if(m_board[i] != nullptr){
-            if(m_board[i]->getIsWhite() && m_whiteToMove) {
-                m_board[i]->generateMoves(m_board);
-                for (auto move : m_board[i]->getMoves()) {
-                    hasMoves = true;
-                    m_whiteMoves.push_back({m_board[i]->getPosition(),move});
-                }
-            } else if (!m_board[i]->getIsWhite() && !m_whiteToMove) {
-                m_board[i]->generateMoves(m_board);
-                for (auto move : m_board[i]->getMoves()) {
-                    hasMoves = true;
-                    m_blackMoves.push_back({m_board[i]->getPosition(),move});
+    if(!m_checkmate) {
+        for (int i = 21; i <= 98; i ++) {
+            if(m_board[i] != nullptr){
+                if(m_board[i]->getIsWhite() && m_whiteToMove) {
+                    m_board[i]->generateMoves(m_board);
+                    for (auto move : m_board[i]->getMoves()) {
+                        hasMoves = true;
+                        m_whiteMoves.push_back({m_board[i]->getPosition(),move});
+                    }
+                } else if (!m_board[i]->getIsWhite() && !m_whiteToMove) {
+                    m_board[i]->generateMoves(m_board);
+                    for (auto move : m_board[i]->getMoves()) {
+                        hasMoves = true;
+                        m_blackMoves.push_back({m_board[i]->getPosition(),move});
+                    }
                 }
             }
         }
@@ -306,10 +309,14 @@ void chessGame::unmakeMove(Move move) {
     if(m_board[move.to]->getType() == king) {
         //moves the rook back
         if(move.to - move.from == 2) {
+            Rook* derived = static_cast<Rook*>(m_board[move.from + 1].get());
+            derived->m_timesMoved -= 2;
             m_board[move.from + 1]->move(move.from + 3);
             m_board[move.from + 3] = std::move(m_board[move.from + 1]);
             m_board[move.from + 1] == nullptr;
         } else if ( move.to - move.from == -2) {
+            Rook* derived = static_cast<Rook*>(m_board[move.from - 1].get());
+            derived->m_timesMoved -= 2;
             m_board[move.from - 1]->move(move.from - 4);
             m_board[move.from - 4] = std::move(m_board[move.from - 1]);
             m_board[move.from - 1] == nullptr;
@@ -324,7 +331,7 @@ void chessGame::unmakeMove(Move move) {
         derived->m_timesMoved -= 2;
         m_board[move.to]->move(move.from);
         m_board[move.from] = std::move(m_board[move.to]);
-        m_board[move.to] = nullptr;
+        m_board[move.to] = std::move(m_lastOccupied.top());
         m_lastOccupied.pop();
 
         // undoes promotion

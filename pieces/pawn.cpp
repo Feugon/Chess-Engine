@@ -52,7 +52,7 @@ void Pawn::generateMoves(std::vector<std::unique_ptr<basePiece>> &board) {
         }
     }
 
-    // this should be its own function at this point....
+
     for(int move: potentialMoves) {
         if(legalMove(board, m_position, move)) {
             m_possibleMoves.push_back(move);

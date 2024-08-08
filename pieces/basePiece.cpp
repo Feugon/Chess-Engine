@@ -64,14 +64,16 @@ std::vector<int> basePiece::slidingMoves(std::vector<std::unique_ptr<basePiece>>
             while(true) {
                 if(isOccupiedByFriendly(board,m_position + distance * shift)) {
                     break;
-                } else if(isOccupiedByEnemy(board, m_position + distance * shift) && legalMove(board, m_position,m_position + distance * shift)) {
-                    possibleMoves.push_back(m_position + distance * shift);
+                } else if(isOccupiedByEnemy(board, m_position + distance * shift)) {
+                    if(legalMove(board, m_position,m_position + distance * shift)) {
+                        possibleMoves.push_back(m_position + distance * shift);
+                    }
                     break;
                 } else if(legalMove(board, m_position,m_position + distance * shift)){
                     possibleMoves.push_back(m_position + distance * shift);
                     distance++;
                 } else {
-                    distance++;
+                    distance++; // this is a bad idea
                 }
             }
         }
@@ -107,12 +109,11 @@ bool basePiece::legalMove(std::vector<std::unique_ptr<basePiece>> &board, int fr
     board[from] = nullptr;
 
 
-    // check if the king is in check
     if(m_isWhite) {
-        if (board[to]->getType() == pawn && (from + 1 == m_enPassantPosition || from - 1 == m_enPassantPosition)) {
+        if (board[to]->getType() == pawn && (from + 1 == m_enPassantPosition || from - 1 == m_enPassantPosition) && to%10 == m_enPassantPosition%10) {
             std::unique_ptr<basePiece> enPassantPawn = std::move(board[m_enPassantPosition]);
             board[m_enPassantPosition] = nullptr;
-            isLegalMove = !(board[to]->inCheck(board));
+            isLegalMove = !(board[m_whiteKingPosition]->inCheck(board));
             board[m_enPassantPosition] = std::move(enPassantPawn);
         } else if(board[to]->getType() != king) {
             isLegalMove = !(board[m_whiteKingPosition]->inCheck(board));
@@ -122,10 +123,10 @@ bool basePiece::legalMove(std::vector<std::unique_ptr<basePiece>> &board, int fr
             board[to]->setIndex(from);                     // this undoes the m_position change
         }
     } else {
-        if (board[to]->getType() == pawn && (from + 1 == m_enPassantPosition || from - 1 == m_enPassantPosition)) {
+        if (board[to]->getType() == pawn && (from + 1 == m_enPassantPosition || from - 1 == m_enPassantPosition) && to%10 == m_enPassantPosition%10) {
             std::unique_ptr<basePiece> enPassantPawn = std::move(board[m_enPassantPosition]);
             board[m_enPassantPosition] = nullptr;
-            isLegalMove = !(board[to]->inCheck(board));
+            isLegalMove = !(board[m_blackKingPosition]->inCheck(board));
             board[m_enPassantPosition] = std::move(enPassantPawn);
         } else if(board[to]->getType() != king) {
             isLegalMove = !(board[m_blackKingPosition]->inCheck(board));

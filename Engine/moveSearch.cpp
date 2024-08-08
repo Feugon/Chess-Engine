@@ -20,7 +20,11 @@ int perft(chessGame &game, int depth) {
 
     for(auto& move: possibleMoves) {
         game.makeMove(move, depth - 1);
-        nodes += perft(game, depth - 1);
+        int x = perft(game, depth - 1);
+        if(depth == 2) {
+            std::cout << move.from << "->" << move.to << ": " << x << std::endl;
+        }
+        nodes += x;
         game.unmakeMove(move);
     }
 
