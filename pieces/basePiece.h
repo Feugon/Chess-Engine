@@ -27,6 +27,8 @@ public:
 
 
     int getPosition(){return m_position;}
+    int getValue();
+    void setValue(int value){m_value = value;}
     std::vector<int> getMoves(){return m_possibleMoves;}
     virtual PieceType getType(){return m_type;}
     virtual bool getIsWhite(){return m_isWhite;}
@@ -39,6 +41,8 @@ protected:
     PieceType m_type = piece;
     bool m_isWhite;
     int m_position;
+    int m_value;
+    std::vector<int> m_positionBonus;
     std::string m_imageDir;
     std::vector<int> m_possibleMoves;
 

@@ -188,7 +188,7 @@ void chessGame::identifyMoves() {
     m_blackMoves.clear();
     bool hasMoves = false; // somehow its faster to use this over .empty()
 
-    if(!m_checkmate) {
+    if(!m_checkmate && !m_stalemate) {
         for (int i = 21; i <= 98; i ++) {
             if(m_board[i] != nullptr){
                 if(m_board[i]->getIsWhite() && m_whiteToMove) {
@@ -210,10 +210,14 @@ void chessGame::identifyMoves() {
 
 
     //checkmate detection
-    if(!hasMoves && m_whiteToMove && m_board[m_whiteKingPosition]->inCheck(m_board)) {
+    if(!hasMoves &&  m_board[m_whiteKingPosition]->inCheck(m_board)) {
+        m_board[m_whiteKingPosition]->setValue(-10000); // this is for evaluation purposes, nothing is better than mate
         m_checkmate = true;
-    } else if (!hasMoves && !m_whiteToMove && m_board[m_blackKingPosition]->inCheck(m_board)) {
+    } else if (!hasMoves  && m_board[m_blackKingPosition]->inCheck(m_board)) {
+        m_board[m_whiteKingPosition]->setValue(10000);
         m_checkmate = true;
+    } else if (!hasMoves) {
+        m_stalemate = true;
     }
 
 
@@ -233,6 +237,7 @@ std::vector<Move> chessGame::getMoves() {
 
 void chessGame::makeMove(Move move, int depth) {
 
+    m_lastMove = move;
     m_lastOccupied.push(std::move(m_board[move.to]));
     m_lastMoveWasPromotion = false;
 
@@ -252,6 +257,7 @@ void chessGame::makeMove(Move move, int depth) {
         m_board[move.from]->move(move.to);
         m_board[move.to] = std::move(m_board[move.from]);
         m_board[move.from] = nullptr;
+
 
     // handles promotion (defaults to queen, should add other pieces at some point)
     } else if(m_board[move.from]->getType() == pawn && (move.to / 10 == 2 || move.to / 10 == 9)) {
@@ -288,7 +294,6 @@ void chessGame::makeMove(Move move, int depth) {
         m_board[move.from]->move(move.to);
         m_board[move.to] = std::move(m_board[move.from]);
         m_board[move.from] = nullptr;
-
     }
 
     m_whiteToMove = !m_whiteToMove;
@@ -369,15 +374,16 @@ void chessGame::unmakeMove(Move move) {
             Rook* derived = static_cast<Rook*>(m_board[move.to].get());
             derived->m_timesMoved -= 2;
         }
-
         m_board[move.to]->move(move.from);
         m_board[move.from] = std::move(m_board[move.to]);
         m_board[move.to] = std::move(m_lastOccupied.top());
         m_lastOccupied.pop();
+
     }
 
 
     m_checkmate = false;
+    m_stalemate = false;
     m_whiteToMove = !m_whiteToMove;
     m_selected = 0;
 

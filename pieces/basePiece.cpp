@@ -18,6 +18,13 @@ void basePiece::move(int index) {
     m_position = index;
 }
 
+int basePiece::getValue() {
+    // my bonus position vectors are only for white pieces so this flips it for black piece indices
+    int reflectedPosition = m_isWhite ? m_position: (5 - m_position / 10) * 20 + 10 + m_position;
+    return m_value + m_positionBonus[reflectedPosition];
+}
+
+
 
 bool basePiece::isOccupiedByFriendly(const std::vector<std::unique_ptr<basePiece>> &board, int index) {
 

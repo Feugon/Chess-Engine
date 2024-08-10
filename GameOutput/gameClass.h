@@ -3,6 +3,7 @@
 #include <vector>
 #include <unordered_map>
 #include <memory>
+#include <unordered_set>
 #include <stack>
 #include "../pieces/basePiece.h"
 
@@ -21,9 +22,12 @@ public:
     void makeMove(Move move, int depth = 1);
     void unmakeMove(Move move);
     std::vector<Move> getMoves();
+    std::vector<std::unique_ptr<basePiece>> m_board;
     void identifyMoves();
+    Move m_lastMove;
 private:
     bool m_checkmate = false;
+    bool m_stalemate = false;
     int m_selected;
     int m_lastSelected;
     int m_whiteKingPosition;
@@ -33,7 +37,6 @@ private:
     std::vector<int> m_moveChoices;
     std::vector<Move> m_whiteMoves;
     std::vector<Move>  m_blackMoves;
-    std::vector<std::unique_ptr<basePiece>> m_board;
     std::stack<std::unique_ptr<basePiece>> m_lastOccupied;
     std::unique_ptr<basePiece> m_enPassantedPawn;
 
