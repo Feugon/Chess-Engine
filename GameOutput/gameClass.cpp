@@ -211,13 +211,17 @@ void chessGame::identifyMoves() {
 
     //checkmate detection
     if(!hasMoves &&  m_board[m_whiteKingPosition]->inCheck(m_board)) {
-        m_board[m_whiteKingPosition]->setValue(-10000); // this is for evaluation purposes, nothing is better than mate
+        m_board[m_whiteKingPosition]->setValue(-100000); // this is for evaluation purposes, nothing is better than mate
         m_checkmate = true;
     } else if (!hasMoves  && m_board[m_blackKingPosition]->inCheck(m_board)) {
-        m_board[m_whiteKingPosition]->setValue(10000);
+        m_board[m_whiteKingPosition]->setValue(100000);
         m_checkmate = true;
     } else if (!hasMoves) {
         m_stalemate = true;
+    } else {
+        //undo the checkmate evaluations
+        m_board[m_whiteKingPosition]->setValue(0);
+        m_board[m_whiteKingPosition]->setValue(0);
     }
 
 

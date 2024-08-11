@@ -45,12 +45,14 @@ int main() {
                 shouldUpdate = true; // Set flag to true when a relevant event occurs
             }
             if (event.type == sf::Event::KeyPressed) {
-                if (event.key.code == sf::Keyboard::Q) {
-                    //playMoves(game);
-                    std::cout << evaluate(game.m_board);
-                    //game.unmakeMove(game.m_lastMove);
-                    //shouldUpdate = true;
-                    // Add your custom logic for the 'Q' key press here
+                if (event.key.code == sf::Keyboard::Q) { // this is for debugging purposes only
+                    /*
+                    Move bestMove;
+                    int bestScore = minimax(game,3,false,bestMove);
+                    std::cout << bestMove.from << "->" << bestMove.to << ": " << bestScore << std::endl;
+                    game.makeMove(bestMove);
+                    shouldUpdate = true;
+                    */
                 }
             }
         }
@@ -63,11 +65,22 @@ int main() {
             game.drawPosition(window);
             game.drawPossibleMoves(window);
 
-
             // Display everything that was drawn
             window.display();
 
             shouldUpdate = false;
+
+            // the engine
+            if(!game.getWhiteToMove()) {
+                Move bestMove;
+                int bestScore = minimax(game,3,false,bestMove);
+                std::cout << bestMove.from << "->" << bestMove.to << ": " << bestScore << std::endl;
+                game.makeMove(bestMove);
+                window.clear();
+                game.drawPosition(window);
+                game.drawPossibleMoves(window);
+                window.display();
+            }
         }
 
 

@@ -24,6 +24,8 @@ public:
     std::vector<Move> getMoves();
     std::vector<std::unique_ptr<basePiece>> m_board;
     void identifyMoves();
+    bool getGameOver(){return m_checkmate || m_stalemate;}
+    bool getWhiteToMove(){return m_whiteToMove;}
     Move m_lastMove;
 private:
     bool m_checkmate = false;

@@ -4,9 +4,46 @@
 
 //Logic based on this -> https://www.chessprogramming.org/Perft
 
-int search(chessGame &game) {
+int minimax(chessGame &game, int depth, bool maximizingPlayer, Move &bestMove) {
+    if (depth == 0 || game.getGameOver()) {
+        return evaluate(game.m_board);
+    }
 
+    std::vector<Move> possibleMoves = game.getMoves();
+
+    if (maximizingPlayer) {
+        int maxEval = -1e9;  // negative infinity
+        for (auto &move : possibleMoves) {
+            game.makeMove(move);
+            Move tempBestMove;
+            int eval = minimax(game, depth - 1, false, tempBestMove);
+            game.unmakeMove(move);
+
+            if (eval > maxEval) {
+                maxEval = eval;
+                bestMove = move;
+            }
+        }
+        return maxEval;
+
+    } else {
+        int minEval = 1e9;  // positive infinity
+        for (auto &move : possibleMoves) {
+            game.makeMove(move);
+            Move tempBestMove;
+            int eval = minimax(game, depth - 1, true, tempBestMove);
+            game.unmakeMove(move);
+
+            if (eval < minEval) {
+                minEval = eval;
+                bestMove = move;
+            }
+        }
+        return minEval;
+    }
 }
+
+
 
 
 int perft(chessGame &game, int depth) {

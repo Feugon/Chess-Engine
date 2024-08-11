@@ -11,6 +11,7 @@ public:
     Pawn(int postion, bool is_white, PieceType type): basePiece(postion, is_white, type) {
         m_imageDir = is_white ? "../images/w_pawn.png" : "../images/b_pawn.png";
         m_value = 100;
+        // these values seem a bit silly...
         m_positionBonus = m_positionBonus = {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
