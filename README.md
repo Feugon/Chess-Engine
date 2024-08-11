@@ -18,7 +18,7 @@ This is my chess engine project developed in C++. The project goals were simply 
 
 - **Performance:** While the engine is striving to be optimized for efficiency, performance could be improved with more advanced techniques such as alpha-beta pruning and transposition tables.
 - **Evaluation Function:** Currently the evaluation function is overally simplistic and has many deficits in positional understanding.
-- **Suboptimal Search Methods:** Due to my inexperience with coding chess engines my legal move serach function is rather naive and hence slow, rebuilding it would make the project significantly better.
+- **Suboptimal Search Methods:** Due to my inexperience with coding chess engines my legal move search function is rather naive and hence slow, rebuilding it would make the project significantly better.
 
 ## What I Learned
 
