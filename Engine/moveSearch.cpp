@@ -1,10 +1,11 @@
 #include "moveSearch.h"
 #include <vector>
 #include <unordered_map>
+#include <algorithm>
 
 //Logic based on this -> https://www.chessprogramming.org/Perft
 
-int minimax(chessGame &game, int depth, bool maximizingPlayer, Move &bestMove) {
+int minimax(chessGame &game, int depth, bool maximizingPlayer, Move &bestMove, int alpha, int beta) {
     if (depth == 0 || game.getGameOver()) {
         return evaluate(game.m_board);
     }
@@ -16,12 +17,17 @@ int minimax(chessGame &game, int depth, bool maximizingPlayer, Move &bestMove) {
         for (auto &move : possibleMoves) {
             game.makeMove(move);
             Move tempBestMove;
-            int eval = minimax(game, depth - 1, false, tempBestMove);
+            int eval = minimax(game, depth - 1, false, tempBestMove, alpha, beta);
             game.unmakeMove(move);
 
             if (eval > maxEval) {
                 maxEval = eval;
                 bestMove = move;
+            }
+
+            alpha = std::max(alpha, eval);
+            if (beta <= alpha) {
+                break;
             }
         }
         return maxEval;
@@ -31,12 +37,17 @@ int minimax(chessGame &game, int depth, bool maximizingPlayer, Move &bestMove) {
         for (auto &move : possibleMoves) {
             game.makeMove(move);
             Move tempBestMove;
-            int eval = minimax(game, depth - 1, true, tempBestMove);
+            int eval = minimax(game, depth - 1, true, tempBestMove, alpha, beta);
             game.unmakeMove(move);
 
             if (eval < minEval) {
                 minEval = eval;
                 bestMove = move;
+            }
+
+            beta = std::min(beta, eval);
+            if (beta <= alpha) {
+                break;
             }
         }
         return minEval;
@@ -46,6 +57,7 @@ int minimax(chessGame &game, int depth, bool maximizingPlayer, Move &bestMove) {
 
 
 
+// for performance testing
 int perft(chessGame &game, int depth) {
     unsigned long long nodes = 0;
 

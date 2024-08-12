@@ -351,7 +351,7 @@ void chessGame::unmakeMove(Move move) {
             m_board[move.from] = std::move(pawnPointer);
             m_board[move.to] = std::move(m_lastOccupied.top());
             m_lastOccupied.pop();
-        } else if (move.to / 10 == 9 && !(m_board[move.from]->getIsWhite())) {
+        } else if (move.to / 10 == 9 && !(m_board[move.to]->getIsWhite())) {
             auto pawnPointer = std::make_unique<Pawn>(move.from,false,pawn);
             m_board[move.from] = std::move(pawnPointer);
             m_board[move.to] = std::move(m_lastOccupied.top());

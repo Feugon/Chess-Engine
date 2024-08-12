@@ -1,7 +1,7 @@
 #pragma once
 #include "../GameOutput/gameClass.h"
 
-int minimax(chessGame &game, int depth, bool maximizingPlayer, Move &bestMove);
+int minimax(chessGame &game, int depth, bool maximizingPlayer, Move &bestMove, int alpha, int beta);
 
 int perft(chessGame &game, int depth);
 
