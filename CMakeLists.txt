@@ -23,15 +23,15 @@ if (SFML_FOUND)
             pieces/rook.h
             pieces/queen.cpp
             pieces/queen.h
-            GameOutput/gameClass.cpp
-            GameOutput/gameClass.h
-            GameOutput/gameClass.cpp
+            gameClass.cpp
+            gameClass.h
+            gameClass.cpp
             constants.h
             pieces/king.cpp
             pieces/king.h
             pieces/padding.h
-            Engine/moveSearch.cpp
-            Engine/moveSearch.h
+            engineFunctions.cpp
+            engineFunctions.h
     )
 
     # Specify include directories

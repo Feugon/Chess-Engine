@@ -1,6 +1,6 @@
 #include "gameClass.h"
 #include <SFML/Graphics.hpp>
-#include "../constants.h"
+#include "constants.h"
 #include <vector>
 #include <iostream>
 #include <unordered_map>
@@ -9,14 +9,14 @@
 #include <cctype>
 #include <cstdlib>
 
-#include "../pieces/basePiece.h"
-#include "../pieces/bishop.h"
-#include "../pieces/knight.h"
-#include "../pieces/pawn.h"
-#include "../pieces/queen.h"
-#include "../pieces/rook.h"
-#include "../pieces/king.h"
-#include "../pieces/padding.h"
+#include "pieces/basePiece.h"
+#include "pieces/bishop.h"
+#include "pieces/knight.h"
+#include "pieces/pawn.h"
+#include "pieces/queen.h"
+#include "pieces/rook.h"
+#include "pieces/king.h"
+#include "pieces/padding.h"
 
 
 // Creates a vector of pointers of the pieces based on the FEN string
@@ -344,8 +344,8 @@ void chessGame::unmakeMove(Move move) {
         m_lastOccupied.pop();
 
         // undoes promotion
-        // note to self: the pawn can't move after getting created, but I don't think that should be an issue
     } else if(m_lastMoveWasPromotion) {
+        m_lastMoveWasPromotion = false;
         if(move.to / 10 == 2 && m_board[move.to]->getIsWhite()) {
             auto pawnPointer = std::make_unique<Pawn>(move.from,true,pawn);
             m_board[move.from] = std::move(pawnPointer);

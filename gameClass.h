@@ -5,7 +5,8 @@
 #include <memory>
 #include <unordered_set>
 #include <stack>
-#include "../pieces/basePiece.h"
+#include "pieces/basePiece.h"
+
 
 struct Move {
     int from;

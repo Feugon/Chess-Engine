@@ -1,4 +1,4 @@
-#include "moveSearch.h"
+#include "engineFunctions.h"
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
@@ -100,13 +100,6 @@ int evaluate(std::vector<std::unique_ptr<basePiece>> &board) {
 }
 
 
-
-void playMoves(chessGame &game) {
-    std::vector<Move> possibleMoves = game.getMoves();
-    int randomIndex = 0 + std::rand() % (possibleMoves.size());
-    game.makeMove(possibleMoves[randomIndex]);
-
-}
 
 
 
