@@ -15,7 +15,7 @@ int minimax(chessGame &game, int depth, bool maximizingPlayer, Move &bestMove, i
     if (maximizingPlayer) {
         int maxEval = -1e9;  // negative infinity
         for (auto &move : possibleMoves) {
-            game.makeMove(move);
+            game.makeMove(move, depth - 1);
             Move tempBestMove;
             int eval = minimax(game, depth - 1, false, tempBestMove, alpha, beta);
             game.unmakeMove(move);
@@ -35,7 +35,7 @@ int minimax(chessGame &game, int depth, bool maximizingPlayer, Move &bestMove, i
     } else {
         int minEval = 1e9;  // positive infinity
         for (auto &move : possibleMoves) {
-            game.makeMove(move);
+            game.makeMove(move, depth - 1);
             Move tempBestMove;
             int eval = minimax(game, depth - 1, true, tempBestMove, alpha, beta);
             game.unmakeMove(move);

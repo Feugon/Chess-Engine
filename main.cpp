@@ -51,7 +51,7 @@ int main() {
                 Move bestMove;
 
                 // depth controls the strength of the engine
-                int bestScore = minimax(game,3,false,bestMove, -1e9, 1e9);
+                int bestScore = minimax(game,4,false,bestMove, -1e9, 1e9);
                 if(!game.getGameOver()) {
                     game.makeMove(bestMove);
                 }

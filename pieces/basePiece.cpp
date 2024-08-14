@@ -44,7 +44,7 @@ bool basePiece::isOccupiedByEnemy(const std::vector<std::unique_ptr<basePiece>> 
 
     if(board[index] == nullptr) {
         return false;
-    } else if(m_isWhite) {
+    } else if(this->m_isWhite) {
         if(!board[index]->getIsWhite() && board[index]->getType() != padding) {
             return true;
         } else {
@@ -65,26 +65,31 @@ std::vector<int> basePiece::slidingMoves(std::vector<std::unique_ptr<basePiece>>
 
     std::vector<int> possibleMoves;
 
-    if(m_type != king) {
+    // generates legal sliding moves for a king, checks for "collisions" with other pieces
+    if(this->m_type != king) {
         for(int shift: shifts) {
             int distance = 1;
             while(true) {
+                // if blocked by friendly piece then break
                 if(isOccupiedByFriendly(board,m_position + distance * shift)) {
                     break;
+                    // if blocked by legal check if its legal, add it, then break
                 } else if(isOccupiedByEnemy(board, m_position + distance * shift)) {
                     if(legalMove(board, m_position,m_position + distance * shift)) {
                         possibleMoves.push_back(m_position + distance * shift);
                     }
                     break;
+                    // check if legal then add
                 } else if(legalMove(board, m_position,m_position + distance * shift)){
                     possibleMoves.push_back(m_position + distance * shift);
                     distance++;
                 } else {
-                    distance++; // this is a bad idea
+                    distance++; // eventually it runs into the wall and breaks out of the loop
                 }
             }
         }
-    } else if (m_type == king){
+        // when we this is reached its to check if king is in check so we don't check for legality
+    } else if (this->m_type == king){
         for(int shift: shifts) {
             int distance = 1;
             while(true) {
@@ -117,6 +122,7 @@ bool basePiece::legalMove(std::vector<std::unique_ptr<basePiece>> &board, int fr
 
 
     if(m_isWhite) {
+        // handles en passant legality
         if (board[to]->getType() == pawn && (from + 1 == m_enPassantPosition || from - 1 == m_enPassantPosition) && to%10 == m_enPassantPosition%10) {
             std::unique_ptr<basePiece> enPassantPawn = std::move(board[m_enPassantPosition]);
             board[m_enPassantPosition] = nullptr;
@@ -125,11 +131,12 @@ bool basePiece::legalMove(std::vector<std::unique_ptr<basePiece>> &board, int fr
         } else if(board[to]->getType() != king) {
             isLegalMove = !(board[m_whiteKingPosition]->inCheck(board));
         } else {
-            board[to]->setIndex(to);                        // this changes position member
+            //changes index of the king, changes legality, then undoes changes
+            board[to]->setIndex(to);
             isLegalMove = !(board[to]->inCheck(board));
-            board[to]->setIndex(from);                     // this undoes the m_position change
+            board[to]->setIndex(from);
         }
-    } else {
+    } else { // same thing for black
         if (board[to]->getType() == pawn && (from + 1 == m_enPassantPosition || from - 1 == m_enPassantPosition) && to%10 == m_enPassantPosition%10) {
             std::unique_ptr<basePiece> enPassantPawn = std::move(board[m_enPassantPosition]);
             board[m_enPassantPosition] = nullptr;
@@ -138,9 +145,9 @@ bool basePiece::legalMove(std::vector<std::unique_ptr<basePiece>> &board, int fr
         } else if(board[to]->getType() != king) {
             isLegalMove = !(board[m_blackKingPosition]->inCheck(board));
         } else {
-            board[to]->setIndex(to);                        // this changes position member
+            board[to]->setIndex(to);
             isLegalMove = !(board[to]->inCheck(board));
-            board[to]->setIndex(from);                     // this undoes the m_position change
+            board[to]->setIndex(from);
         }
     }
 

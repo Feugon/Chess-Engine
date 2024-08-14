@@ -22,6 +22,8 @@
 // Creates a vector of pointers of the pieces based on the FEN string
 chessGame::chessGame(const std::string &FEN) {
 
+    // this doesn't take the full FEN, doesn't take in side to move, castling, and en passant...
+
     m_whiteToMove = true;
     int stringIndex = 0;
 
@@ -31,7 +33,6 @@ chessGame::chessGame(const std::string &FEN) {
             m_board.push_back(std::move(paddingPointer));
 
         } else if (std::isdigit(FEN[stringIndex])) {
-            // empty spaces... not super readable code
             int numSpaces = FEN[stringIndex] - '0';
             stringIndex++;
             for(int j = 0; j < numSpaces; j++) {
@@ -39,14 +40,12 @@ chessGame::chessGame(const std::string &FEN) {
             }
             i += numSpaces - 1;
 
-            //idk if this should be here
             if(FEN[stringIndex] == '/') {
                 stringIndex++;
             }
 
 
         } else if (FEN[stringIndex] != '/'){
-            //The above condition check seems dumb... will deal with it later
             bool is_white = std::isupper(FEN[stringIndex]);
 
             if (FEN[stringIndex] == 'p' || FEN[stringIndex] == 'P') {
@@ -94,6 +93,7 @@ chessGame::chessGame(const std::string &FEN) {
 
 
 void chessGame::drawPosition(sf::RenderWindow& window) {
+    // draws the tiles
     for(int i=0; i < 8; i++) {
         for(int j=0; j < 8; j++) {
             sf::Color color = (i+j)%2 == 0 ? constants::white : constants::black;
@@ -144,7 +144,7 @@ void chessGame::selectedSetter(int mouseX, int mouseY) {
 
     int x = mouseX / constants::TILE_WIDTH;
     int y = mouseY / constants::TILE_HEIGHT;
-    m_selected = 21 + (10*y) + x;
+    m_selected = 21 + (10*y) + x; // converts the coords into 1-d index for our board vector
 
 
     // checks if we are moving the piece
@@ -174,6 +174,9 @@ void chessGame::selectedSetter(int mouseX, int mouseY) {
 
 void chessGame::castle(bool kingsideCastle) {
     int kingPosition = m_whiteToMove ? m_whiteKingPosition : m_blackKingPosition;
+
+    //this moves the rook and the king to the right square and cleans up the square the rook left
+    //kings square gets set to nullptr by the  move funcion
     if(kingsideCastle) {
         m_board[kingPosition + 3]->move(kingPosition + 1);
         m_board[kingPosition + 1] = std::move(m_board[kingPosition + 3]);
@@ -189,8 +192,10 @@ void chessGame::castle(bool kingsideCastle) {
 void chessGame::identifyMoves() {
     m_whiteMoves.clear();
     m_blackMoves.clear();
-    bool hasMoves = false; // somehow its faster to use this over .empty()
+    bool hasMoves = false; // somehow its significantly faster to use this over .empty()
 
+    // I tried using another array of locations of just active pieces, but managaing it made the program slower...
+    // if game isn't over then loop over every square (except for padding) and generate the pieces moves
     if(!m_checkmate && !m_stalemate) {
         for (int i = 21; i <= 98; i ++) {
             if(m_board[i] != nullptr){
@@ -214,10 +219,10 @@ void chessGame::identifyMoves() {
 
     //checkmate detection
     if(!hasMoves &&  m_board[m_whiteKingPosition]->inCheck(m_board)) {
-        m_board[m_whiteKingPosition]->setValue(-100000); // this is for evaluation purposes, nothing is better than mate
+        m_board[m_whiteKingPosition]->setValue(-1e7); // this is for evaluation purposes, nothing is better than mate
         m_checkmate = true;
     } else if (!hasMoves  && m_board[m_blackKingPosition]->inCheck(m_board)) {
-        m_board[m_whiteKingPosition]->setValue(100000);
+        m_board[m_whiteKingPosition]->setValue(1e7);
         m_checkmate = true;
     } else if (!hasMoves) {
         m_stalemate = true;
@@ -231,8 +236,6 @@ void chessGame::identifyMoves() {
 }
 
 std::vector<Move> chessGame::getMoves() {
-
-
      if(m_whiteToMove) {
          return m_whiteMoves;
     } else {
@@ -244,6 +247,7 @@ std::vector<Move> chessGame::getMoves() {
 
 void chessGame::makeMove(Move move, int depth) {
 
+    //keeps track of pieces that were on the square before, even empty ones
     m_lastOccupied.push(std::move(m_board[move.to]));
 
     // check for castling logic
@@ -303,6 +307,8 @@ void chessGame::makeMove(Move move, int depth) {
 
     m_whiteToMove = !m_whiteToMove;
 
+    // this is so the engine doesn't generate moves when it reached its depth
+    // significantly speeds up the calculations
     if(depth != 0) {
     identifyMoves();
     }
@@ -395,7 +401,7 @@ void chessGame::unmakeMove(Move move) {
 }
 
 
-
+// these are the indices of the board (21 = a8, 98 = h1)
 /*
 21 22 23 24 25 26 27 28
 31 32 33 34 35 36 37 38
