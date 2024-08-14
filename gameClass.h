@@ -36,7 +36,7 @@ private:
     int m_whiteKingPosition;
     int m_blackKingPosition;
     bool m_whiteToMove;
-    bool m_lastMoveWasPromotion;
+    Move m_lastPromotionMove;
     std::vector<int> m_moveChoices;
     std::vector<Move> m_whiteMoves;
     std::vector<Move>  m_blackMoves;

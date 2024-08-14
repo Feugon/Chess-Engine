@@ -150,6 +150,9 @@ void chessGame::selectedSetter(int mouseX, int mouseY) {
     // checks if we are moving the piece
     bool selectedMove = std::find(m_moveChoices.begin(), m_moveChoices.end(), m_selected) != m_moveChoices.end();
     if (selectedMove) {
+        if (m_board[m_lastSelected]->getType() == pawn && m_selected / 10 == 2) {
+            m_lastPromotionMove = {0,0};
+        }
         makeMove({m_lastSelected,m_selected});
         m_selected = 0;
     }
@@ -241,9 +244,7 @@ std::vector<Move> chessGame::getMoves() {
 
 void chessGame::makeMove(Move move, int depth) {
 
-    m_lastMove = move;
     m_lastOccupied.push(std::move(m_board[move.to]));
-    m_lastMoveWasPromotion = false;
 
     // check for castling logic
     if(m_board[move.from]->getType() == king) {
@@ -265,7 +266,7 @@ void chessGame::makeMove(Move move, int depth) {
 
     // handles promotion (defaults to queen, should add other pieces at some point)
     } else if(m_board[move.from]->getType() == pawn && (move.to / 10 == 2 || move.to / 10 == 9)) {
-        m_lastMoveWasPromotion = true;
+        m_lastPromotionMove = move;
         if(move.to / 10 == 2 && m_board[move.from]->getIsWhite()) {
             auto queenPointer = std::make_unique<Queen>(move.to,true,queen);
             m_board[move.to] = std::move(queenPointer);
@@ -344,8 +345,8 @@ void chessGame::unmakeMove(Move move) {
         m_lastOccupied.pop();
 
         // undoes promotion
-    } else if(m_lastMoveWasPromotion) {
-        m_lastMoveWasPromotion = false;
+    } else if(m_lastPromotionMove.from == move.from && m_lastPromotionMove.to == move.to) {
+        m_lastPromotionMove = {0,0};
         if(move.to / 10 == 2 && m_board[move.to]->getIsWhite()) {
             auto pawnPointer = std::make_unique<Pawn>(move.from,true,pawn);
             m_board[move.from] = std::move(pawnPointer);
